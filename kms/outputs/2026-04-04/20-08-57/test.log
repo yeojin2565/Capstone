@@ -1,0 +1,2043 @@
+[2026-04-04 20:08:57,895][flwr][INFO] - Starting Flower simulation, config: ServerConfig(num_rounds=3, round_timeout=None)
+[2026-04-04 20:09:00,032][flwr][INFO] - Flower VCE: Ray initialized with resources: {'object_store_memory': 1964550144.0, 'node:127.0.0.1': 1.0, 'memory': 3929100288.0, 'CPU': 2.0}
+[2026-04-04 20:09:00,033][flwr][INFO] - Initializing global parameters
+[2026-04-04 20:09:00,033][flwr][INFO] - Requesting initial parameters from one random client
+[2026-04-04 20:09:01,392][flwr][INFO] - Received initial parameters from one random client
+[2026-04-04 20:09:01,393][flwr][INFO] - Evaluating initial parameters
+[2026-04-04 20:09:03,619][flwr][INFO] - initial parameters (loss, other metrics): 181.81608319282532, {'accuracy': 0.1204}
+[2026-04-04 20:09:03,620][flwr][INFO] - FL starting
+[2026-04-04 20:09:03,620][flwr][DEBUG] - fit_round 1: strategy sampled 3 clients (out of 30)
+[2026-04-04 20:09:07,286][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 52, in fit
+    return self.get_parameters(), len(self.trainloader), {}
+TypeError: get_parameters() missing 1 required positional argument: 'config'
+[2026-04-04 20:09:10,763][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 52, in fit
+    return self.get_parameters(), len(self.trainloader), {}
+TypeError: get_parameters() missing 1 required positional argument: 'config'
+[2026-04-04 20:09:11,676][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_fit()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 50, in fit
+    train(self.model, self.trainloader, optim, epochs, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 32, in train
+    for images, labels in trainloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 14908, 2276) exited unexpectedly
+[2026-04-04 20:09:11,680][flwr][DEBUG] - fit_round 1 received 0 results and 3 failures
+[2026-04-04 20:09:13,887][flwr][INFO] - fit progress: (1, 181.81608319282532, {'accuracy': 0.1204}, 10.267457499999999)
+[2026-04-04 20:09:13,887][flwr][DEBUG] - evaluate_round 1: strategy sampled 25 clients (out of 30)
+[2026-04-04 20:09:19,252][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 7968, 12832) exited unexpectedly
+[2026-04-04 20:09:21,654][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 19508) exited unexpectedly
+[2026-04-04 20:09:26,816][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 19160) exited unexpectedly
+[2026-04-04 20:09:29,136][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 2248) exited unexpectedly
+[2026-04-04 20:09:34,296][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 18080) exited unexpectedly
+[2026-04-04 20:09:36,618][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 21840) exited unexpectedly
+[2026-04-04 20:09:41,760][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 20836) exited unexpectedly
+[2026-04-04 20:09:44,109][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 5712) exited unexpectedly
+[2026-04-04 20:09:49,224][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 2028) exited unexpectedly
+[2026-04-04 20:09:49,311][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 3696, 6916) exited unexpectedly
+[2026-04-04 20:09:54,514][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 2032, 13848) exited unexpectedly
+[2026-04-04 20:09:56,804][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 6212) exited unexpectedly
+[2026-04-04 20:09:59,702][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 19176, 17984) exited unexpectedly
+[2026-04-04 20:10:04,172][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 4704) exited unexpectedly
+[2026-04-04 20:10:04,890][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 13820, 11956) exited unexpectedly
+[2026-04-04 20:10:10,073][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 5728, 2584) exited unexpectedly
+[2026-04-04 20:10:11,653][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 1976) exited unexpectedly
+[2026-04-04 20:10:15,252][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 2248, 5504) exited unexpectedly
+[2026-04-04 20:10:19,006][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 16272) exited unexpectedly
+[2026-04-04 20:10:20,428][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 13720, 17076) exited unexpectedly
+[2026-04-04 20:10:26,288][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 20568) exited unexpectedly
+[2026-04-04 20:10:27,675][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 19492) exited unexpectedly
+[2026-04-04 20:10:32,887][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 18148, 23148) exited unexpectedly
+[2026-04-04 20:10:33,624][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 1200) exited unexpectedly
+[2026-04-04 20:10:35,209][flwr][DEBUG] - evaluate_round 1 received 1 results and 24 failures
+[2026-04-04 20:10:35,209][flwr][WARNING] - No evaluate_metrics_aggregation_fn provided
+[2026-04-04 20:10:35,210][flwr][DEBUG] - fit_round 2: strategy sampled 3 clients (out of 30)
+[2026-04-04 20:10:42,655][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 50, in fit
+    train(self.model, self.trainloader, optim, epochs, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 32, in train
+    for images, labels in trainloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 21008) exited unexpectedly
+[2026-04-04 20:10:42,697][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_fit()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 50, in fit
+    train(self.model, self.trainloader, optim, epochs, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 32, in train
+    for images, labels in trainloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 23956) exited unexpectedly
+[2026-04-04 20:10:45,957][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 52, in fit
+    return self.get_parameters(), len(self.trainloader), {}
+TypeError: get_parameters() missing 1 required positional argument: 'config'
+[2026-04-04 20:10:45,958][flwr][DEBUG] - fit_round 2 received 0 results and 3 failures
+[2026-04-04 20:10:48,126][flwr][INFO] - fit progress: (2, 181.81608319282532, {'accuracy': 0.1204}, 104.5054114)
+[2026-04-04 20:10:48,126][flwr][DEBUG] - evaluate_round 2: strategy sampled 25 clients (out of 30)
+[2026-04-04 20:10:53,503][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 10884, 10848) exited unexpectedly
+[2026-04-04 20:10:55,685][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 12100) exited unexpectedly
+[2026-04-04 20:11:00,826][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 8720) exited unexpectedly
+[2026-04-04 20:11:02,917][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 4016) exited unexpectedly
+[2026-04-04 20:11:08,184][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 20516) exited unexpectedly
+[2026-04-04 20:11:10,504][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 23900) exited unexpectedly
+[2026-04-04 20:11:15,616][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 7740) exited unexpectedly
+[2026-04-04 20:11:17,885][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 22192) exited unexpectedly
+[2026-04-04 20:11:23,035][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 15504) exited unexpectedly
+[2026-04-04 20:11:23,085][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 16248, 17944) exited unexpectedly
+[2026-04-04 20:11:28,294][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 13428, 5756) exited unexpectedly
+[2026-04-04 20:11:30,705][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 24420) exited unexpectedly
+[2026-04-04 20:11:33,479][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 12248, 23704) exited unexpectedly
+[2026-04-04 20:11:38,504][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 1420) exited unexpectedly
+[2026-04-04 20:11:38,670][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 12252, 5180) exited unexpectedly
+[2026-04-04 20:11:43,880][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 23908, 22444) exited unexpectedly
+[2026-04-04 20:11:46,409][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 21032) exited unexpectedly
+[2026-04-04 20:11:49,072][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 3704, 21188) exited unexpectedly
+[2026-04-04 20:11:54,044][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 8648) exited unexpectedly
+[2026-04-04 20:11:54,253][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 12296, 7740) exited unexpectedly
+[2026-04-04 20:11:59,432][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 21700, 17472) exited unexpectedly
+[2026-04-04 20:12:01,705][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 5308) exited unexpectedly
+[2026-04-04 20:12:04,602][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 23544, 19028) exited unexpectedly
+[2026-04-04 20:12:09,140][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 17604) exited unexpectedly
+[2026-04-04 20:12:09,777][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 748, 5416) exited unexpectedly
+[2026-04-04 20:12:09,780][flwr][DEBUG] - evaluate_round 2 received 0 results and 25 failures
+[2026-04-04 20:12:09,781][flwr][DEBUG] - fit_round 3: strategy sampled 3 clients (out of 30)
+[2026-04-04 20:12:16,642][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 50, in fit
+    train(self.model, self.trainloader, optim, epochs, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 32, in train
+    for images, labels in trainloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 18028, 14032) exited unexpectedly
+[2026-04-04 20:12:17,503][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_fit()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 50, in fit
+    train(self.model, self.trainloader, optim, epochs, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 32, in train
+    for images, labels in trainloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 21036) exited unexpectedly
+[2026-04-04 20:12:23,968][flwr][ERROR] - [36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_fit()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 148, in launch_and_fit
+    return maybe_call_fit(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 184, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 297, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 50, in fit
+    train(self.model, self.trainloader, optim, epochs, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 32, in train
+    for images, labels in trainloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 23620) exited unexpectedly
+[2026-04-04 20:12:23,971][flwr][DEBUG] - fit_round 3 received 0 results and 3 failures
+[2026-04-04 20:12:26,244][flwr][INFO] - fit progress: (3, 181.81608319282532, {'accuracy': 0.1204}, 202.62368)
+[2026-04-04 20:12:26,244][flwr][DEBUG] - evaluate_round 3: strategy sampled 25 clients (out of 30)
+[2026-04-04 20:12:31,698][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 20776, 10684) exited unexpectedly
+[2026-04-04 20:12:33,996][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 17000) exited unexpectedly
+[2026-04-04 20:12:36,871][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 22400, 24228) exited unexpectedly
+[2026-04-04 20:12:41,316][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 13436) exited unexpectedly
+[2026-04-04 20:12:42,041][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 20628, 5216) exited unexpectedly
+[2026-04-04 20:12:47,235][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 7768, 14572) exited unexpectedly
+[2026-04-04 20:12:48,771][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 15880) exited unexpectedly
+[2026-04-04 20:12:52,429][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=6228, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 2388, 17260) exited unexpectedly
+[2026-04-04 20:12:56,255][flwr][ERROR] - [36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\multiprocessing\queues.py", line 108, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+[36mray::launch_and_evaluate()[39m (pid=17980, ip=127.0.0.1)
+  File "python\ray\_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 674, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 640, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 644, in ray._raylet.execute_task
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 160, in launch_and_evaluate
+    return maybe_call_evaluate(
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\client.py", line 205, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\client\app.py", line 321, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "C:\Users\78960\Capstone\kms\client.py", line 60, in evaluate
+    loss, accuracy = test(self.model, self.valloader, self.device)
+  File "C:\Users\78960\Capstone\kms\model.py", line 47, in test
+    for data in testloader:
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\78960\anaconda3\envs\flower_tutorial\lib\site-packages\torch\utils\data\dataloader.py", line 1133, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 16416) exited unexpectedly

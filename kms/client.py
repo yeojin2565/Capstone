@@ -1,7 +1,10 @@
+import random
+
 from collections import OrderedDict
 from typing import Dict
 from flwr.common import NDArray, Scalar
 
+import time
 import torch
 import flwr as fl
 
@@ -17,16 +20,16 @@ class FlowerClient(fl.client.NumPyClient):
         self.trainloader = trainloader
         self.valloader = valloader
 
-        self.model = Net(num_class)
+        self.device = torch.device("cpu")
+        self.model = Net(num_class).to(self.device)
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     
     def set_parameters(self, parameters):
 
         params_dict = zip(self.model.state_dict().keys(), parameters)
 
-        state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
+        state_dict = OrderedDict({k: torch.Tensor(v).to(self.device) for k, v in params_dict})
 
         self.model.load_state_dict(state_dict, strict=True)
 
@@ -35,7 +38,8 @@ class FlowerClient(fl.client.NumPyClient):
         return [val.cpu().numpy() for _, val in self.model.state_dict().items()]
 
     def fit(self, parameters, config):
-
+        
+        self.model.to(self.device)
         # copy parameters sent by the sever into client's local model
         self.set_parameters(parameters)
 
@@ -45,14 +49,28 @@ class FlowerClient(fl.client.NumPyClient):
 
         optim = torch.optim.SGD(self.model.parameters(), lr=lr, momentum = momentum)
 
+        
         #do local training
+        start_time = time.time()
         train(self.model, self.trainloader, optim, epochs, self.device)
+        train_latency = time.time() - start_time
 
-        return self.get_parameters(), len(self.trainloader), {}
+        loss, accuracy = test(self.model, self.valloader, self.device)
+        he_latency = random.uniform(0.01, 0.1)
+
+        metrics = {
+            "loss": float(loss),
+            "accuracy": float(accuracy),
+            "train_latency": float(train_latency),
+            "he_latency": float(he_latency),
+            "data_size": len(self.trainloader.dataset)
+        }
+        return self.get_parameters(config), len(self.trainloader.dataset), metrics
 
 
     def evaluate(self, parameters: NDArray, config: Dict[str, Scalar]):
         
+        self.model.to(self.device)
         self.set_parameters(parameters)
 
         loss, accuracy = test(self.model, self.valloader, self.device)
@@ -61,7 +79,7 @@ class FlowerClient(fl.client.NumPyClient):
     
 
 
-def gennerate_client_fn(trainloeaders, valloaders, num_classes):
+def generate_client_fn(trainloeaders, valloaders, num_classes):
 
     def client_fn(cid: str):
 

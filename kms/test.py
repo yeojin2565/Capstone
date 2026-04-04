@@ -1,14 +1,18 @@
+
+import pickle
+from pathlib import Path
+
 import hydra
 from omegaconf import DictConfig, OmegaConf
+from hydra.core.hydra_config import HydraConfig
 
 import flwr as fl
 
 from dataset import prepare_dataset
-from client import gennerate_client_fn
+from client import generate_client_fn
 from server import get_on_fit_config, get_evaluate_fn
 import ray
 
-ray.shutdown()
 
 
 @hydra.main(config_path="conf", config_name="base", version_base=None)
@@ -22,9 +26,8 @@ def main(cfg: DictConfig):
 
 
     ## 3. Define clients
-    client_fn = gennerate_client_fn(trainloaders, validationloaders, cfg.num_classes)
-
-
+    client_fn = generate_client_fn(trainloaders, validationloaders, cfg.num_classes)
+        
     ## 4. Define strategy
     strategy = fl.server.strategy.FedAvg(fraction_fit=0.00001,
                                          min_fit_clients=cfg.num_clients_per_round_fit,
@@ -38,17 +41,20 @@ def main(cfg: DictConfig):
     history = fl.simulation.start_simulation(
         client_fn=client_fn,
         num_clients=cfg.num_clients,
+        client_resources={"num_cpus": 0.5, "num_gpus": 0},
         config=fl.server.ServerConfig(num_rounds=cfg.num_rounds),
         strategy=strategy,
-        ray_init_args={
-            "include_dashboard": False,
-            "ignore_reinit_error": True,
-            "num_cpus": 1,   
-        }
+        ray_init_args={"num_cpus": 2, "num_gpus": 0, "include_dashboard": False},
     )
 
     ## 6. Save results
+    save_path = HydraConfig.get().runtime.output_dir
+    results_path = Path(save_path) / 'results.pkl'
 
+    results = {'history': history, 'anythingesle': "here"}
+
+    with open(str(results_path), 'wb') as h:
+        pickle.dump(results, h, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == "__main__":
