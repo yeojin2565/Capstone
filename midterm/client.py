@@ -62,15 +62,10 @@ class FlowerClient(fl.client.NumPyClient):
         # 현재 weight
         new_weights = self.get_parameters(config)
 
-        # delta 계산 (핵심: weight 변화량)
-        delta = [
-            new - old
-            for new, old in zip(new_weights, old_weights)
-        ]
 
         # HE 암호화
         start_he = time.time()
-        encrypted_delta = encrypt_weights(delta)
+        encrypted_weights = encrypt_weights(new_weights)
         he_latency = time.time() - start_he
 
         metrics = {
@@ -84,7 +79,7 @@ class FlowerClient(fl.client.NumPyClient):
         self.last_state = metrics
 
         # delta를 반환 (weight 아님)
-        return encrypted_delta, len(self.trainloader.dataset), metrics
+        return encrypted_weights, len(self.trainloader.dataset), metrics
 
     def evaluate(self, parameters: NDArray, config: Dict[str, Scalar]):
 
