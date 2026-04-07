@@ -1,6 +1,0 @@
-num_round: 10
-num_client: 100
-batch_size: 20
-config_fit:
-  lr: 0.01
-  momentum: 0.9
