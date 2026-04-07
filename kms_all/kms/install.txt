@@ -1,2 +1,0 @@
-pip uninstall torch torchvision torchaudio -y
-pip install torch torchvision torchaudio
