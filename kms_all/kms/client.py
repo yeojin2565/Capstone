@@ -50,7 +50,7 @@ class FlowerClient(fl.client.NumPyClient):
         optim = torch.optim.SGD(self.model.parameters(), lr=lr, momentum = momentum)
 
         
-        #do local training
+        # do local training
         start_time = time.time()
         train(self.model, self.trainloader, optim, epochs, self.device)
         train_latency = time.time() - start_time
