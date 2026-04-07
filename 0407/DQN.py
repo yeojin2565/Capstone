@@ -77,6 +77,7 @@ class DQNAgent:
         action: 선택된 클라이언트 인덱스 리스트 (예: [0, 3, 7])
         → 저장 시 multi-hot 벡터로 변환 (예: [1,0,0,1,0,0,0,1,0,0])
         """
+        # note: 클라이언트 개수 30개로 늘려야하므로 DQN output 고쳐야함
         action_vec = np.zeros(self.action_size, dtype=np.float32)
         for idx in action:
             action_vec[idx] = 1.0
