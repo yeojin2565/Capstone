@@ -86,8 +86,9 @@ def compute_reward(
     """
     R = -(round_duration / max_duration) + alpha * delta_acc - beta * dropout
     """
+    # FIXME: 리워드 함수 수정 필요 - DQN agent의 reward 음수 문제
     delta_acc = curr_accuracy - prev_accuracy
-    # note: 리워드 함수 수정 필요
+
     return -(round_duration / max_duration) + alpha * delta_acc - beta * dropout_count
  
  
