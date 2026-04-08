@@ -6,7 +6,7 @@ DQN 제안 방법 vs Random baseline 비교 그래프
 사용법:
     python compare_results.py \
     --dqn_path outputs/YYYY-MM-DD/HH-MM-SS/results.pkl \
-    --random_path output/YYYY-MM-DD/HH-MM-SS/results_random.pkl
+    --random_path outputs/YYYY-MM-DD/HH-MM-SS/results_random.pkl
 """
 
 import pickle
@@ -52,6 +52,27 @@ def convergence_round(accuracies: list, threshold: float) -> int | None:
     return None
 
 
+# ── 이동 평균 추세선 ───────────────────────────────────
+def add_moving_average(ax, x: list, y: list, color: str, window: int = 5):
+    """
+    단순 이동 평균(SMA) 추세선 추가
+    window: 이동 평균 윈도우 크기 (데이터 수보다 크면 자동 축소)
+    """
+    if len(y) < 2:
+        return
+    window = min(window, len(y))
+    kernel = np.ones(window) / window
+    ma     = np.convolve(y, kernel, mode="valid")
+    # convolve valid 모드: len(y) - window + 1 개 반환 → x 앞부분 맞추기
+    x_ma   = x[window - 1:]
+    ax.plot(
+        x_ma, ma,
+        color=color, linewidth=2.2,
+        linestyle="-", alpha=0.85,
+        label="_nolegend_",
+    )
+
+
 # ── 비교 그래프 ────────────────────────────────────────
 def plot_comparison(
     dqn_results: dict,
@@ -91,12 +112,13 @@ def plot_comparison(
     # ── 1. Global Loss ─────────────────────────────────
     ax = axes[0][0]
     if d_loss:
-        ax.plot(d_rl, d_loss, color=COLOR_DQN,    linewidth=2, marker="o", markersize=4)
+        ax.plot(d_rl, d_loss, color=COLOR_DQN,   linewidth=1.5, alpha=0.35)
         ax.fill_between(d_rl, d_loss, alpha=COLOR_SHADE, color=COLOR_DQN)
+        add_moving_average(ax, d_rl, d_loss, COLOR_DQN)
     if r_loss:
-        ax.plot(r_rl, r_loss, color=COLOR_RANDOM,  linewidth=2, marker="s", markersize=4,
-                linestyle="--")
+        ax.plot(r_rl, r_loss, color=COLOR_RANDOM, linewidth=1.5, alpha=0.35)
         ax.fill_between(r_rl, r_loss, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        add_moving_average(ax, r_rl, r_loss, COLOR_RANDOM)
     ax.set_title("Global Loss", fontsize=12)
     ax.set_xlabel("Round")
     ax.set_ylabel("Loss")
@@ -110,12 +132,13 @@ def plot_comparison(
     random_conv = convergence_round(r_acc, conv_threshold)
 
     if d_acc:
-        ax.plot(d_ra, d_acc, color=COLOR_DQN,   linewidth=2, marker="o", markersize=4)
+        ax.plot(d_ra, d_acc, color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
         ax.fill_between(d_ra, d_acc, alpha=COLOR_SHADE, color=COLOR_DQN)
+        add_moving_average(ax, d_ra, d_acc, COLOR_DQN)
     if r_acc:
-        ax.plot(r_ra, r_acc, color=COLOR_RANDOM, linewidth=2, marker="s", markersize=4,
-                linestyle="--")
+        ax.plot(r_ra, r_acc, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
         ax.fill_between(r_ra, r_acc, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        add_moving_average(ax, r_ra, r_acc, COLOR_RANDOM)
 
     ax.axhline(conv_threshold, color="gray", linestyle=":", linewidth=1.2,
                label=f"threshold ({conv_threshold:.0%})")
@@ -138,13 +161,13 @@ def plot_comparison(
     # ── 3. HE Latency (핵심 비교) ──────────────────────
     ax = axes[1][0]
     if dqn_he:
-        ax.plot(dqn_rounds_he,    dqn_he,    color=COLOR_DQN,    linewidth=2,
-                marker="o", markersize=4)
+        ax.plot(dqn_rounds_he,    dqn_he,    color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
         ax.fill_between(dqn_rounds_he, dqn_he, alpha=COLOR_SHADE, color=COLOR_DQN)
+        add_moving_average(ax, dqn_rounds_he, dqn_he, COLOR_DQN)
     if random_he:
-        ax.plot(random_rounds_he, random_he, color=COLOR_RANDOM,  linewidth=2,
-                marker="s", markersize=4, linestyle="--")
+        ax.plot(random_rounds_he, random_he, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
         ax.fill_between(random_rounds_he, random_he, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        add_moving_average(ax, random_rounds_he, random_he, COLOR_RANDOM)
 
     ax.set_title("Avg HE Latency (normalized)", fontsize=12)
     ax.set_xlabel("Round")
@@ -157,13 +180,13 @@ def plot_comparison(
     # ── 4. Reward ──────────────────────────────────────
     ax = axes[1][1]
     if dqn_rew:
-        ax.plot(dqn_rounds_he,    dqn_rew,    color=COLOR_DQN,    linewidth=2,
-                marker="o", markersize=4)
+        ax.plot(dqn_rounds_he,    dqn_rew,    color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
         ax.fill_between(dqn_rounds_he, dqn_rew, alpha=COLOR_SHADE, color=COLOR_DQN)
+        add_moving_average(ax, dqn_rounds_he, dqn_rew, COLOR_DQN)
     if random_rew:
-        ax.plot(random_rounds_he, random_rew, color=COLOR_RANDOM,  linewidth=2,
-                marker="s", markersize=4, linestyle="--")
+        ax.plot(random_rounds_he, random_rew, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
         ax.fill_between(random_rounds_he, random_rew, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        add_moving_average(ax, random_rounds_he, random_rew, COLOR_RANDOM)
 
     ax.axhline(0, color="gray", linestyle="--", linewidth=0.8)
     ax.set_title("Reward per Round", fontsize=12)
