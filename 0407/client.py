@@ -20,7 +20,7 @@ class FlowerClient(fl.client.NumPyClient):
         self.trainloader = trainloader
         self.valloader = valloader
 
-        self.device = torch.device("cpu")
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = Net(num_class).to(self.device)
 
 
@@ -60,8 +60,8 @@ class FlowerClient(fl.client.NumPyClient):
         loss, accuracy = test(self.model, self.valloader, self.device)
         
         # 4. he_latency
-        # note: 지금은 더미 값이지만 추후 실제 측정 값으로 수정
-        he_latency = random.uniform(0.01, 0.1) 
+        # FIXME: 실제 측정 값으로 수정 바람
+        he_latency = random.uniform(0.01, 1.0) 
 
         # client feature(state feature) 
         metrics = { # 1 matrics per client
