@@ -25,6 +25,7 @@ from flwr.common import (
     FitRes,
     Parameters,
     Scalar,
+    ndarrays_to_parameters,
 )
  
 from DQN import DQNAgent, K_SELECT
@@ -99,9 +100,10 @@ class FedAvgWithDQN(FedAvg):
     aggregate_fit()  : 부모 집계 후 DQN 업데이트용 transition 저장
     """
  
-    def __init__(self, dqn_agent: DQNAgent, **kwargs):
+    def __init__(self, dqn_agent: DQNAgent, he_context=None, **kwargs):
         super().__init__(**kwargs)
         self.agent = dqn_agent
+        self.he_context = he_context  # 비밀키 포함 컨텍스트 (복호화용)
  
         # 라운드 간 전달용 버퍼
         self._prev_state    = default_state(N_CLIENTS)
@@ -175,13 +177,23 @@ class FedAvgWithDQN(FedAvg):
         """
         import time
  
-        # 부모 집계
+        # 부모 집계 (평문 FedAvg fallback용)
         aggregated_params, aggregated_metrics = super().aggregate_fit(
             server_round, results, failures
         )
  
         if not results:
             return aggregated_params, aggregated_metrics
+        
+        if self.he_context is not None:
+            from server import aggregate_he_weights
+            he_weights = aggregate_he_weights(results, self.he_context)
+            if he_weights is not None:
+                # HE 복호화된 가중치로 교체
+                aggregated_params = ndarrays_to_parameters(he_weights)
+                print(f"[DQN] Round {server_round} HE FedAvg 적용 완료")
+            else:
+                print(f"[DQN] Round {server_round} HE 실패 → 평문 FedAvg 사용")
  
         # ── metrics 수집 ──────────────────────────────
         metrics_list = []

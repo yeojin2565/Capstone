@@ -7,7 +7,6 @@ Random selection baseline 실험 실행
 사용법:
     python run_baseline.py
 """
-
 import pickle
 from pathlib import Path
 
@@ -22,6 +21,7 @@ from client import generate_client_fn
 from server import get_on_fit_config, get_evaluate_fn
 from random_strategy import FedAvgWithRandom
 from DQN import K_SELECT
+from he_utils import create_he_context, get_public_context
 
 
 @hydra.main(config_path="conf", config_name="base", version_base=None)
@@ -29,11 +29,23 @@ def main(cfg: DictConfig):
 
     print("── Random Baseline 실험 ──")
     print(OmegaConf.to_yaml(cfg))
-
+    
+    # ── HE 컨텍스트 생성 (test.py와 동일 구조) ──────────
+    print("── HE 컨텍스트 생성 중... ──")
+    he_context_full         = create_he_context()
+    he_context_public       = get_public_context(he_context_full)
+    he_context_public_bytes = he_context_public.serialize()
+    print("── HE 컨텍스트 생성 완료 ──")
+ 
     trainloaders, validationloaders, testloaders = prepare_dataset(
         cfg.num_clients, cfg.batch_size
     )
-    client_fn = generate_client_fn(trainloaders, validationloaders, cfg.num_classes)
+    
+
+    client_fn = generate_client_fn(
+        trainloaders, validationloaders, cfg.num_classes,
+        he_context_bytes=he_context_public_bytes,
+    )
 
     strategy = FedAvgWithRandom(
         k_select=cfg.num_clients_per_round_fit,
@@ -43,7 +55,7 @@ def main(cfg: DictConfig):
         min_evaluate_clients=cfg.num_clients_per_round_eval,
         min_available_clients=cfg.num_clients,
         on_fit_config_fn=get_on_fit_config(cfg.config_fit),
-        evaluate_fn=get_evaluate_fn(cfg.num_classes, testloaders),
+        evaluate_fn=get_evaluate_fn(cfg.num_classes, testloaders, he_context_full),
     )
 
     history = fl.simulation.start_simulation(
