@@ -1,4 +1,4 @@
-
+# dataset.py
 
 import torch
 from torch.utils.data import random_split, DataLoader
@@ -40,7 +40,7 @@ def prepare_dataset(num_partitions: int,
     idxs_labels = idxs_labels[:, idxs_labels[1].argsort()]
     sorted_idxs = idxs_labels[0]
 
-    # shard 생성
+    # shard 생성(Non-IID)
     shards = [sorted_idxs[i * shard_size:(i + 1) * shard_size] for i in range(num_shards)]
 
     trainloaders = []

@@ -1,9 +1,10 @@
+# model.py
 
 import torch    
 import torch.nn as nn
 import torch.nn.functional as F
 
-class Net(nn.Module):
+class Net(nn.Module): # input: 1×28×28, output: 10 classes
     def __init__(self, num_classes: int) -> None:
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 6, 5)
