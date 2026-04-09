@@ -30,9 +30,9 @@ from flwr.common import (
 from DQN import DQNAgent, K_SELECT
 
 # ── 상수 ──────────────────────────────────────────────
-N_CLIENTS  = 10   # 엣지당 클라이언트 수
+N_CLIENTS  = 30   # 엣지당 클라이언트 수 
 N_FEATURES = 5    # loss, accuracy, train_latency, he_latency, data_size
-STATE_SIZE = N_CLIENTS * N_FEATURES  # 50
+STATE_SIZE = N_CLIENTS * N_FEATURES  
  
  
 # ── 기본 state (첫 라운드용) ───────────────────────────
@@ -70,26 +70,25 @@ def normalize_metrics(metrics_list: list[dict]) -> np.ndarray:
         row = np.clip(row / scale, 0.0, 1.0)
         rows.append(row)
  
-    return np.array(rows, dtype=np.float32).flatten()  # (50,)
+    return np.array(rows, dtype=np.float32).flatten()  # (30*5,)
  
  
 # ── Reward 계산 ───────────────────────────────────────
+MAX_HE_LATENCY = 1.0   # normalize_matrics에서 [0, 1] 정규화했으므로
+
 def compute_reward(
-    prev_accuracy: float,
-    curr_accuracy: float,
-    round_duration: float,
-    max_duration: float = 60.0,
-    alpha: float = 1.0,
+    avg_he_latency_norm: float,
     beta: float = 0.3,
     dropout_count: int = 0,
 ) -> float:
     """
-    R = -(round_duration / max_duration) + alpha * delta_acc - beta * dropout
+    R = -(avg_he_latency_norm) - beta * dropout
+    
+    - HE latency 절감이 DQN의 핵심 학습 목표
+    - he_latency 낮은 클라이언트 선택 -> reward 증가
+    - he_latency 높은 클라이언트 선택 -> reward 감소
     """
-    # FIXME: 리워드 함수 수정 필요 - DQN agent의 reward 음수 문제
-    delta_acc = curr_accuracy - prev_accuracy
-
-    return -(round_duration / max_duration) + alpha * delta_acc - beta * dropout_count
+    return -avg_he_latency_norm - beta * dropout_count
  
  
 # ── DQN 커스텀 전략 ───────────────────────────────────
@@ -196,18 +195,27 @@ class FedAvgWithDQN(FedAvg):
  
         next_state = normalize_metrics(metrics_list[:N_CLIENTS])
  
-        # ── accuracy 추출 (reward용) ───────────────────
+        # ── accuracy 추출 (기록용) ───────────────────
         accuracies = [m.get("accuracy", 0.0) for m in metrics_list]
         curr_accuracy = float(np.mean(accuracies)) if accuracies else 0.0
  
         # ── round duration ─────────────────────────────
         round_duration = time.time() - self._round_start if self._round_start else 1.0
         dropout_count  = len(failures)
+
+        # ── he_latency 추출 ────────────────────────────
+        # next_state에서 he_latency 위치: feature 순서상 index 3
+        # (loss=0, accuracy=1, train_latency=2, he_latency=3, data_size=4)
+        he_latencies_norm = [
+            float(np.clip(m.get("he_latency", 0.5) / 1.0, 0.0, 1.0))
+            for m in metrics_list if m
+        ]
+        avg_he_latency_norm = float(np.mean(he_latencies_norm)) if he_latencies_norm else 0.5
+ 
+        dropout_count = len(failures)
  
         reward = compute_reward(
-            prev_accuracy=self._prev_accuracy,
-            curr_accuracy=curr_accuracy,
-            round_duration=round_duration,
+            avg_he_latency_norm=avg_he_latency_norm,
             dropout_count=dropout_count,
         )
  
@@ -226,6 +234,7 @@ class FedAvgWithDQN(FedAvg):
         self.history_metrics.append({
             "round":         server_round,
             "accuracy":      curr_accuracy,
+            "avg_he_latency_norm": avg_he_latency_norm,
             "reward":        reward,
             "round_duration": round_duration,
             "dropout_count": dropout_count,
@@ -235,6 +244,7 @@ class FedAvgWithDQN(FedAvg):
         print(
             f"[DQN] Round {server_round} 집계 완료 | "
             f"accuracy={curr_accuracy:.4f} | "
+            f"avg_he_latency(norm)={avg_he_latency_norm:.4f} | "
             f"reward={reward:.4f} | "
             f"dqn_loss={f'{loss:.4f}' if loss is not None else 'buffer 부족'}"
         )
