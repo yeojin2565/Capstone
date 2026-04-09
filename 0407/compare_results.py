@@ -221,6 +221,31 @@ def plot_comparison(
         print(f"{'평균 Reward':20s} {np.mean(dqn_rew):>10.4f} {np.mean(random_rew):>10.4f}")
     print("──────────────────────────────────────")
 
+# ── DQN Epsilon per Round ──────────────────────────────
+def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
+    dqn_metrics = dqn_results.get("dqn_metrics", [])
+    if not dqn_metrics:
+        print("dqn_metrics 데이터가 없습니다.")
+        return
+
+    rounds  = [m["round"]   for m in dqn_metrics]
+    epsilon = [m["epsilon"] for m in dqn_metrics]
+
+    plt.figure(figsize=(10,5))
+    plt.plot(rounds, epsilon, color=COLOR_DQN, linewidth=2)
+    plt.title("DQN Epsilon per Round", fontsize=12, fontweight="bold")
+    plt.xlabel("Round")
+    plt.ylabel("Epsilon")
+    plt.ylim(0, 1.05)
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+
+    out = Path(save_dir) / "epsilon_per_round.png"
+    Path(save_dir).mkdir(parents=True, exist_ok=True)
+    plt.savefig(out, dpi=150)
+    plt.show()
+    print(f"Epsilon 그래프 저장 완료: {out}")
+
 
 # ── 메인 ──────────────────────────────────────────────
 if __name__ == "__main__":
@@ -240,4 +265,8 @@ if __name__ == "__main__":
         save_dir=args.save_dir,
         conv_threshold=args.threshold,
     )
-    
+
+    plot_epsilon_graph(
+        dqn_results,
+        save_dir=args.save_dir,
+    )

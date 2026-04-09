@@ -12,7 +12,7 @@ from collections import deque
 GAMMA           = 0.95
 LR              = 0.001
 EPSILON_START   = 1.0
-EPSILON_DECAY   = 0.995
+EPSILON_DECAY   = 0.97
 EPSILON_MIN     = 0.01
 BATCH_SIZE      = 32
 MEMORY_SIZE     = 2000

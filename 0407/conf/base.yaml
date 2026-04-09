@@ -1,6 +1,6 @@
 ---
 
-num_rounds: 1
+num_rounds: 100
 num_clients: 30                  # 전체 클라이언트
 batch_size: 20                   
 num_classes: 10
