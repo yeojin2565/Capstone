@@ -228,6 +228,11 @@ def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
         print("dqn_metrics 데이터가 없습니다.")
         return
 
+    # epsilon 키가 없으면 조기 종료
+    if "epsilon" not in dqn_metrics[0]:
+        print("epsilon 데이터가 없습니다. dqn_strategy.py에 epsilon 저장 코드를 추가하세요.")
+        return
+    
     rounds  = [m["round"]   for m in dqn_metrics]
     epsilon = [m["epsilon"] for m in dqn_metrics]
 

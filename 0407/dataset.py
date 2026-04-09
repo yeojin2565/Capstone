@@ -17,7 +17,6 @@ def get_mnist(data_path: str = './data'):
     return trainset, testset
 
 
-
 import numpy as np
 
 def prepare_dataset(num_partitions: int,
