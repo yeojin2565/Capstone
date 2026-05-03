@@ -17,7 +17,7 @@ from DQN_strategy import FedAvgWithDQN, N_CLIENTS, STATE_SIZE
 from he_utils import create_he_context, get_public_context
 
 
-@hydra.main(config_path="conf", config_name="base", version_base=None)
+@hydra.main(config_path="config", config_name="base", version_base=None)
 def main(cfg: DictConfig):
 
     ## 1. config 출력
