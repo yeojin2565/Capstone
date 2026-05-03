@@ -244,13 +244,14 @@ class FedAvgWithDQN(FedAvg):
  
         # ── 기록 ──────────────────────────────────────
         self.history_metrics.append({
-            "round":         server_round,
-            "accuracy":      curr_accuracy,
+            "round":               server_round,
+            "accuracy":            curr_accuracy,
             "avg_he_latency_norm": avg_he_latency_norm,
-            "reward":        reward,
-            "round_duration": round_duration,
-            "dropout_count": dropout_count,
-            "dqn_loss":      loss,
+            "reward":              reward,
+            "round_duration":      round_duration,
+            "dropout_count":       dropout_count,
+            "dqn_loss":            loss,
+            "epsilon":             self.agent.epsilon
         })
  
         print(

@@ -17,7 +17,7 @@ EPSILON_MIN     = 0.01
 BATCH_SIZE      = 32
 MEMORY_SIZE     = 2000
 N_CLIENTS       = 30    # 엣지당 클라이언트 수
-K_SELECT        = 10     # 매 라운드 선택할 클라이언트 수
+K_SELECT        = 10    # 매 라운드 선택할 클라이언트 수
 TARGET_UPDATE   = 10    # 몇 스텝마다 target network 동기화
 
 
