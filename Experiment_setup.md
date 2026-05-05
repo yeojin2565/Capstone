@@ -73,7 +73,7 @@ $R = -\text{average HE latency} +\alpha * \text{average accuracy} - \beta * drop
 # 4. 요약
 |항목|설정값|
 |---|---|
-|Num of clients|30|
+|Num of clients|36|
 |선택되는 클라이언트 수(k)|10|
 |dataset|CIFAR-10(Non-IID, Dirichlet α=0.5)|
 |Local model|CNN(3채널 입력)|
