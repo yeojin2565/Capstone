@@ -64,8 +64,11 @@ class FedAvgWithRandom(FedAvg):
         avg_he   = float(np.mean([m.get("he_latency", 0.5) for m in metrics_list]))
 
         # DQN과 동일한 reward 공식으로 계산 (공정한 비교)
-        he_norms = [np.clip(m.get("he_latency", 0.5) / 6.0, 0.0, 1.0) for m in metrics_list]
-        reward   = -float(np.mean(he_norms)) + curr_acc - 0.3 * dropout_count
+        alpha = 0.3
+        beta = 0.3
+        
+        he_norms = [np.clip(m.get("he_latency", 0.5) / 1.5, 0.0, 1.0) for m in metrics_list]
+        reward   = -float(np.mean(he_norms)) + alpha * curr_acc - beta * dropout_count
 
         self.history_metrics.append({
             "round":          server_round,
