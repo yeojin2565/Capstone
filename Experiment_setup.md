@@ -1,8 +1,10 @@
 # Experiment Setup
 
 ## 1. Architecture
-1 Cloud Server 36 clients<br>
+- 1 Cloud Server 36 clients
+- 클라이언트에서 2번의 epoch 수행 후 서버로 전송, FedAvg 후 글로벌 모델 업데이트(Flower 프레임워크)
 
+## 2. Clients Design
 |그룹|수량|HE latency 분포|특성|
 |---|---|---|---|
 |Excellent|3개|$N(0.02, 0.005)$|극단적으로 좋음|
@@ -11,7 +13,6 @@
 |Slow|10개|$N(1.5, 0.25)$|느림|
 |Extreme|3개|$N(5.0, 0.50)$|극단적으로 나쁨|
 
-## 2. Clients Design
 ### (a) Features
 ```python
 # 클라이언트별 고정 특성
