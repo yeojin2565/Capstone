@@ -21,7 +21,7 @@ from flwr.common import FitIns, FitRes, Parameters
 from dqn import DQNAgent, K_SELECT, N_CLIENTS, N_FEATURES, STATE_SIZE
 
 # ── 정규화 기준값 ──────────────────────────────────────
-SCALE = np.array([5.0, 1.0, 10.0, 6.0, 2000.0], dtype=np.float32)
+SCALE = np.array([5.0, 1.0, 10.0, 1.5, 2000.0], dtype=np.float32)
 # loss, accuracy, train_latency, he_latency(max=6.0), data_size
 
 
@@ -49,7 +49,7 @@ def normalize_metrics(metrics_list: list[dict]) -> np.ndarray:
 def compute_reward(
     metrics_list: list[dict],
     dropout_count: int,
-    alpha: float = 1.0,
+    alpha: float = 0.3,
     beta: float  = 0.3,
 ) -> float:
     """
@@ -59,7 +59,7 @@ def compute_reward(
     - accuracy 높은 클라이언트 선택  → reward 증가 (보조)
     - dropout 발생                  → reward 감소
     """
-    he_norms  = [np.clip(m.get("he_latency", 0.5) / 6.0, 0.0, 1.0) for m in metrics_list if m]
+    he_norms  = [np.clip(m.get("he_latency", 0.5) / 1.5, 0.0, 1.0) for m in metrics_list if m]
     accs      = [m.get("accuracy", 0.0) for m in metrics_list if m]
 
     avg_he  = float(np.mean(he_norms)) if he_norms else 0.5

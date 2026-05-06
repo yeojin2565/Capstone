@@ -78,7 +78,7 @@ def plot_comparison(
     dqn_results: dict,
     random_results: dict,
     save_dir: str = ".",
-    conv_threshold: float = 0.90,
+    conv_threshold: float = 0.80,
 ):
     # 데이터 파싱
     d_rl, d_loss, d_ra, d_acc = parse_history(dqn_results["history"])
