@@ -5,7 +5,6 @@ Random selection baseline
 """
 
 import random
-import time
 import numpy as np
 
 from flwr.server.strategy import FedAvg
@@ -40,7 +39,9 @@ class FedAvgWithRandom(FedAvg):
 
         print(f"\n[Random] Round {server_round} | selected={selected_idx}")
 
-        config  = self.on_fit_config_fn(server_round) if self.on_fit_config_fn else {}
+        config = self.on_fit_config_fn(server_round) if self.on_fit_config_fn else {}
+        config["recent_dropout_rate"] = 0.0  # random은 dropout 기록 없음
+
         fit_ins = FitIns(parameters, config)
         return [(c, fit_ins) for c in selected_clients]
 
@@ -60,15 +61,12 @@ class FedAvgWithRandom(FedAvg):
         metrics_list  = [fit_res.metrics or {} for _, fit_res in results]
         dropout_count = sum(m.get("dropped", 0) for m in metrics_list) + len(failures)
 
-        curr_acc = float(np.mean([m.get("accuracy", 0.0) for m in metrics_list]))
+        curr_acc = float(np.mean([m.get("accuracy",   0.0) for m in metrics_list]))
         avg_he   = float(np.mean([m.get("he_latency", 0.5) for m in metrics_list]))
 
-        # DQN과 동일한 reward 공식으로 계산 (공정한 비교)
-        alpha = 0.3
-        beta = 0.3
-        
+        # DQN과 동일한 reward 공식 (공정한 비교)
         he_norms = [np.clip(m.get("he_latency", 0.5) / 1.5, 0.0, 1.0) for m in metrics_list]
-        reward   = -float(np.mean(he_norms)) + alpha * curr_acc - beta * dropout_count
+        reward   = -float(np.mean(he_norms)) + 0.3 * curr_acc - 0.3 * dropout_count
 
         self.history_metrics.append({
             "round":          server_round,

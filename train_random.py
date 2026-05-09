@@ -6,6 +6,7 @@ Random selection baseline 실험 실행
 """
 
 import pickle
+import torch
 from pathlib import Path
 
 import hydra
@@ -19,7 +20,6 @@ from client import generate_client_fn
 from server import get_on_fit_config, get_evaluate_fn
 from dqn import K_SELECT
 from random_strategy import FedAvgWithRandom
-import torch
 
 
 @hydra.main(config_path="conf", config_name="base", version_base=None)
@@ -59,13 +59,15 @@ def main(cfg: DictConfig):
         client_fn=client_fn,
         num_clients=cfg.num_clients,
         client_resources={"num_cpus": 1, 
-                          "num_gpus": 0.2 if n_gpus > 0 else 0
+                          "num_gpus": 0.1 if n_gpus > 0 else 0
                           },
         config=fl.server.ServerConfig(num_rounds=cfg.num_rounds),
         strategy=strategy,
         ray_init_args={"num_cpus": 4,
                        "num_gpus": n_gpus, 
-                       "include_dashboard": False},
+                       "include_dashboard": False,
+                       "object_store_memory": 3 * 1024 ** 3,  # 3GB 명시적 제한
+                       },
     )
 
     # 5. 저장
