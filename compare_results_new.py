@@ -1,12 +1,16 @@
 """
-compare_results.py
+compare_results_new.py
 
 DQN 제안 방법 vs Random baseline 비교 그래프
 
 사용법:
-    python compare_results.py \
+    python compare_results_new.py \
     --dqn_path outputs/YYYY-MM-DD/HH-MM-SS/results.pkl \
     --random_path outputs/YYYY-MM-DD/HH-MM-SS/results_random.pkl
+
+수정 사항:
+    [BUG-10 치명] plot_epsilon_graph(): epsilon 키 존재 여부 가드 누락 → KeyError.
+                  compare_results.py에 있던 가드를 동일하게 적용.
 """
 
 import pickle
@@ -18,18 +22,16 @@ from pathlib import Path
 
 
 # ── 색상 ──────────────────────────────────────────────
-COLOR_DQN    = "#1D9E75"   # 초록  (제안 방법)
-COLOR_RANDOM = "#D85A30"   # 주황  (baseline)
-COLOR_SHADE  = 0.10        # fill_between 투명도
+COLOR_DQN    = "#1D9E75"
+COLOR_RANDOM = "#D85A30"
+COLOR_SHADE  = 0.10
 
 
-# ── 로드 ──────────────────────────────────────────────
 def load(path: str) -> dict:
     with open(path, "rb") as f:
         return pickle.load(f)
 
 
-# ── history 파싱 ───────────────────────────────────────
 def parse_history(history):
     rounds_loss, losses = [], []
     if history.losses_centralized:
@@ -44,7 +46,6 @@ def parse_history(history):
     return rounds_loss, losses, rounds_acc, accuracies
 
 
-# ── 수렴 라운드 ────────────────────────────────────────
 def convergence_round(accuracies: list, threshold: float) -> int | None:
     for i, a in enumerate(accuracies):
         if a >= threshold:
@@ -52,14 +53,15 @@ def convergence_round(accuracies: list, threshold: float) -> int | None:
     return None
 
 
-# ── 이동 평균 추세선 ───────────────────────────────────
 def add_moving_average(ax, x: list, y: list, color: str, window: int = 5):
     if len(y) < 2:
         return
+    x = list(x)
+    y = list(y)
     window = min(window, len(y))
     kernel = np.ones(window) / window
     ma     = np.convolve(y, kernel, mode="valid")
-    x_ma   = x[window - 1:]
+    x_ma   = x[window - 1: window - 1 + len(ma)]   # 길이 명시적 맞춤
     ax.plot(
         x_ma, ma,
         color=color, linewidth=2.2,
@@ -68,7 +70,6 @@ def add_moving_average(ax, x: list, y: list, color: str, window: int = 5):
     )
 
 
-# ── 비교 그래프 ────────────────────────────────────────
 def plot_comparison(
     dqn_results: dict,
     random_results: dict,
@@ -98,8 +99,8 @@ def plot_comparison(
     def legend_labels():
         from matplotlib.lines import Line2D
         return [
-            Line2D([0], [0], color=COLOR_DQN,    linewidth=2, label="DQN (proposed)"),
-            Line2D([0], [0], color=COLOR_RANDOM,  linewidth=2, label="Random (baseline)"),
+            Line2D([0], [0], color=COLOR_DQN,   linewidth=2, label="DQN (proposed)"),
+            Line2D([0], [0], color=COLOR_RANDOM, linewidth=2, label="Random (baseline)"),
         ]
 
     ax = axes[0][0]
@@ -123,17 +124,16 @@ def plot_comparison(
     random_conv = convergence_round(r_acc, conv_threshold)
 
     if d_acc:
-        ax.plot(d_ra, d_acc, color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
+        ax.plot(d_ra, d_acc, color=COLOR_DQN,   linewidth=1.5, alpha=0.35)
         ax.fill_between(d_ra, d_acc, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, d_ra, d_acc, COLOR_DQN)
     if r_acc:
-        ax.plot(r_ra, r_acc, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
+        ax.plot(r_ra, r_acc, color=COLOR_RANDOM, linewidth=1.5, alpha=0.35)
         ax.fill_between(r_ra, r_acc, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, r_ra, r_acc, COLOR_RANDOM)
 
     ax.axhline(conv_threshold, color="gray", linestyle=":", linewidth=1.2,
                label=f"threshold ({conv_threshold:.0%})")
-
     if dqn_conv:
         ax.axvline(dqn_conv,    color=COLOR_DQN,    linestyle=":", linewidth=1.0,
                    label=f"DQN convergence: Round {dqn_conv}")
@@ -210,17 +210,23 @@ def plot_comparison(
     print("──────────────────────────────────────")
 
 
-# ── DQN Epsilon per Round ──────────────────────────────
 def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
     dqn_metrics = dqn_results.get("dqn_metrics", [])
     if not dqn_metrics:
         print("dqn_metrics 데이터가 없습니다.")
         return
 
+    # ── [BUG-10 FIX] epsilon 키 존재 여부 가드 추가 ────────────────
+    # 수정 전: m["epsilon"] 직접 접근 → random pkl 사용 시 KeyError
+    # 수정 후: compare_results.py와 동일하게 가드 적용
+    if "epsilon" not in dqn_metrics[0]:
+        print("epsilon 데이터가 없습니다. dqn_strategy.py에 epsilon 저장 코드를 확인하세요.")
+        return
+
     rounds  = [m["round"]   for m in dqn_metrics]
     epsilon = [m["epsilon"] for m in dqn_metrics]
 
-    plt.figure(figsize=(10,5))
+    plt.figure(figsize=(10, 5))
     plt.plot(rounds, epsilon, color=COLOR_DQN, linewidth=2)
     plt.title("DQN Epsilon per Round", fontsize=12, fontweight="bold")
     plt.xlabel("Round")
@@ -236,7 +242,6 @@ def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
     print(f"Epsilon 그래프 저장 완료: {out}")
 
 
-# ── 메인 ──────────────────────────────────────────────
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dqn_path",    type=str, default="results_dqn.pkl")
