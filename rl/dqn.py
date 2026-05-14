@@ -22,7 +22,7 @@ N_CLIENTS     = 36
 N_FEATURES    = 6       # loss, accuracy, train_latency, he_latency, data_size, recent_dropout_rate
 EMBED_DIM     = 16      # client embedding 차원
 STATE_SIZE    = N_CLIENTS * N_FEATURES   # 216
-K_SELECT      = 10      # 매 라운드 선택할 클라이언트 수
+K_SELECT      = 4      # 매 라운드 선택할 클라이언트 수
 
 GAMMA         = 0.95
 LR            = 0.001

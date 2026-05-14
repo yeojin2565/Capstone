@@ -61,7 +61,7 @@ def normalize_metrics(metrics_list: list[dict]) -> np.ndarray:
 def compute_reward(
     metrics_list: list[dict],
     dropout_count: int,
-    alpha: float = 0.3,
+    alpha: float = 0.0,
     beta:  float = 0.3,
 ) -> float:
     """

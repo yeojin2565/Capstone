@@ -5,6 +5,7 @@ Random selection baseline 실험 실행
 결과: outputs/{날짜}/{시간}/results_random.pkl
 """
 
+import os
 import pickle
 import torch
 from pathlib import Path
@@ -21,8 +22,11 @@ from src.server import get_on_fit_config, get_evaluate_fn
 from rl.dqn import K_SELECT
 from strategy.random_strategy import FedAvgWithRandom
 
+_conf_path = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "conf"
+)
 
-@hydra.main(config_path="conf", config_name="base", version_base=None)
+@hydra.main(config_path=_conf_path, config_name="base", version_base=None)
 def main(cfg: DictConfig):
     print("── Random Baseline ──")
     print(OmegaConf.to_yaml(cfg))
@@ -66,7 +70,6 @@ def main(cfg: DictConfig):
         ray_init_args={"num_cpus": 4,
                        "num_gpus": n_gpus, 
                        "include_dashboard": False,
-                       "object_store_memory": 3 * 1024 ** 3,  # 3GB 명시적 제한
                        },
     )
 

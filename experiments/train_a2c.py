@@ -54,7 +54,6 @@ def main(cfg: DictConfig):
         ray_init_args={
             "num_cpus": 4, "num_gpus": n_gpus,
             "include_dashboard": False,
-            "object_store_memory": 3 * 1024 ** 3,
         },
     )
 

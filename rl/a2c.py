@@ -22,10 +22,10 @@ import torch.optim as optim
 from torch.distributions import Categorical
 
 # ── Hyperparameters ────────────────────────────────────────────
-N_CLIENTS  = 36
+N_CLIENTS  = 10
 N_FEATURES = 6     # he_latency, accuracy, loss, train_latency, data_size, recent_dropout_rate
 EMBED_DIM  = 16
-K_SELECT   = 10
+K_SELECT   = 2
 
 LR          = 0.0003
 GAMMA       = 0.95
