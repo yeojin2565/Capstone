@@ -1,6 +1,9 @@
 """
 random_strategy.py - Random selection baseline
 DQN과 동일한 reward 공식 사용 (공정한 비교)
+
+수정 사항:
+    [TUNE-1] reward 가중치·tanh 스케일·fast_bonus를 DQN과 동일하게 맞춤
 """
 
 import random
@@ -14,8 +17,10 @@ from flwr.common import FitIns, FitRes, Parameters
 
 from dqn import K_SELECT
 
-HE_MAX   = 6.0
-DATA_MAX = 4000.0
+HE_MAX             = 6.0
+DATA_MAX           = 4000.0
+HE_BONUS_THRESHOLD = 0.05
+HE_BONUS_VALUE     = 0.10
 
 
 class FedAvgWithRandom(FedAvg):
@@ -62,18 +67,22 @@ class FedAvgWithRandom(FedAvg):
         avg_data    = float(np.mean([m.get("data_size", 500) for m in metrics_list]))
 
         acc_gain      = curr_acc - self._prev_acc
-        acc_gain_norm = float(np.tanh(acc_gain / 0.05))   # DQN과 동일한 정규화
+        acc_gain_norm = float(np.tanh(acc_gain / 0.03))   # DQN과 동일
 
         quality_bonuses   = [d * (1.0 - h) for d, h in zip(data_norms, he_norms)]
         avg_quality_bonus = float(np.mean(quality_bonuses))
 
         dropout_rate = dropout_count / max(self.k_select, 1)
 
+        fast_count = sum(1 for h in he_norms if h < HE_BONUS_THRESHOLD)
+        fast_bonus = HE_BONUS_VALUE * (fast_count / max(self.k_select, 1))
+
         reward = (
-              0.4 * acc_gain_norm
-            + 0.3 * avg_quality_bonus
-            - 0.2 * avg_he_norm
-            - 0.1 * dropout_rate
+              0.35 * acc_gain_norm
+            + 0.15 * avg_quality_bonus
+            - 0.45 * avg_he_norm
+            - 0.05 * dropout_rate
+            + fast_bonus
         )
 
         self.history_metrics.append({

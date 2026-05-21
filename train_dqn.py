@@ -7,6 +7,16 @@ DQN 기반 클라이언트 선택 실험 실행
 수정 사항:
     [BUG-8 경미] ray.init(): 이미 초기화된 경우 중복 호출 방지 (ray.is_initialized() 가드)
     [BUG-9 경미] 미사용 import torch, K_SELECT 제거
+    [TUNE-5 FIX] dqn.py BATCH_SIZE 64→32 연동:
+                 epsilon은 train_step() 내부에서만 감소하므로,
+                 메모리가 BATCH_SIZE개 미만인 구간(=초반 라운드)에서는
+                 학습이 실행되지 않아 epsilon이 1.0에 머무름.
+                 BATCH_SIZE=32 기준 타임라인:
+                   Round  1~31 : 메모리 축적 (순수 랜덤 탐색)
+                   Round 32~71 : 학습 시작, epsilon 1.0→0.05 감소 (탐색)
+                   Round 72~   : epsilon MIN 도달, exploitation 구간
+                 → conf/base.yaml num_rounds: 200 권장
+                   (32 워밍업 + 40 탐색 + 128 exploitation)
 """
 
 import pickle
@@ -66,7 +76,7 @@ def main(cfg: DictConfig):
     # 4. PCA 사전 학습
     print("[PCA] 초기 state 샘플 생성 중...")
     n_pca_samples = 500
-    base = default_client_state(N_CLIENTS).flatten()            # (180,)
+    base = default_client_state(N_CLIENTS).flatten()            # (500,)
     rand = np.random.uniform(0, 1, (n_pca_samples, STATE_SIZE)).astype(np.float32)
     rand[0] = base
     agent.fit_pca(rand)

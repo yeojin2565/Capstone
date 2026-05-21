@@ -3,18 +3,19 @@ he_simulator.py
 
 그룹별 HE latency 시뮬레이션 (실제 HE 연산 없음)
 
-그룹 구성 (36 clients):
-    Excellent  (cid 0~2)   : N(0.02, 0.005)  극단적으로 좋은 기기
-    Fast       (cid 3~12)  : N(0.10, 0.020)  빠른 기기
-    Medium     (cid 13~22) : N(0.50, 0.080)  보통 기기
-    Slow       (cid 23~32) : N(1.50, 0.250)  느린 기기
-    Extreme    (cid 33~35) : N(5.00, 0.500)  극단적으로 나쁜 기기
+그룹 구성 (100 clients):
+    Excellent  (cid 0~4)    : N(0.02, 0.005)  극단적으로 좋은 기기
+    Fast       (cid 5~34)   : N(0.10, 0.020)  빠른 기기
+    Medium     (cid 35~64)  : N(0.50, 0.080)  보통 기기
+    Slow       (cid 65~89)  : N(1.50, 0.250)  느린 기기
+    Extreme    (cid 90~99)  : N(5.00, 0.500)  극단적으로 나쁜 기기
 
 수정 사항:
     [BUG-11 중간] init_base_latency(): np.random.seed()로 전역 상태를 오염시키던 문제 수정.
                   np.random.default_rng(seed + cid)로 독립 RNG 인스턴스를 사용.
                   → Ray 병렬 액터 환경에서도 다른 클라이언트의 랜덤 시퀀스에 간섭하지 않음.
                   → 재현성 보장.
+    [CHANGE] 클라이언트 수 36 → 100에 맞게 그룹 경계 재조정.
 """
 
 import numpy as np
@@ -34,11 +35,11 @@ HE_LATENCY_MAX = 6.0
 
 
 def get_group(cid: int) -> str:
-    """클라이언트 ID → 그룹명"""
-    if cid < 3:    return "excellent"
-    elif cid < 13: return "fast"
-    elif cid < 23: return "medium"
-    elif cid < 33: return "slow"
+    """클라이언트 ID → 그룹명 (100 clients 기준)"""
+    if cid < 5:    return "excellent"
+    elif cid < 35: return "fast"
+    elif cid < 65: return "medium"
+    elif cid < 90: return "slow"
     else:          return "extreme"
 
 
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     print("── 그룹별 HE latency 분포 확인 ──\n")
 
     groups = {}
-    for cid in range(36):
+    for cid in range(100):
         group = get_group(cid)
         base  = init_base_latency(cid, seed=42)
         if group not in groups:

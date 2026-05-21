@@ -59,7 +59,7 @@ def dirichlet_split(targets, num_clients: int, alpha: float = 0.5, seed: int = 4
 
 
 def prepare_dataset(
-    num_clients: int = 36,
+    num_clients: int = 100,
     batch_size: int = 32,
     val_ratio: float = 0.1,
     alpha: float = 0.5,
@@ -99,7 +99,7 @@ def prepare_dataset(
  
  
 if __name__ == "__main__":
-    train_subsets, val_subsets, testloader = prepare_dataset(num_clients=36)
+    train_subsets, val_subsets, testloader = prepare_dataset(num_clients=100)
     print(f"클라이언트 수: {len(train_subsets)}")
     print(f"테스트셋 크기: {len(testloader.dataset)}")
     for i in range(5):

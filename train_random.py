@@ -7,6 +7,8 @@ Random selection baseline 실험 실행
 수정 사항:
     [BUG-8 경미] ray.init(): 이미 초기화된 경우 중복 호출 방지 (ray.is_initialized() 가드)
     [BUG-9 경미] 미사용 import torch 제거
+    [TUNE-5 FIX] DQN과 공정한 비교를 위해 동일한 num_rounds 사용 권장.
+                 conf/base.yaml num_rounds: 200
 """
 
 import pickle
