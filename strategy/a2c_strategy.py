@@ -21,20 +21,20 @@ from flwr.server.client_manager import ClientManager
 from flwr.server.client_proxy import ClientProxy
 from flwr.common import FitIns, FitRes, Parameters
 
-from rl.a2c import A2CAgent, K_SELECT, N_CLIENTS, N_FEATURES
+from rl.a2c import A2CAgent, N_FEATURES
 from src.he_simulator import get_group
 
 # ── 정규화 기준값 ──────────────────────────────────────
 # [he_latency, accuracy, loss, train_latency, data_size, recent_dropout_rate]
 SCALE = np.array([6.0, 1.0, 5.0, 10.0, 2000.0, 1.0], dtype=np.float32)
-
-
+#                 ^^^
 # 6.0 기준: excellent=0.003, fast=0.017, medium=0.083, slow=0.25, extreme=0.833
+# → 모든 그룹이 구분 가능한 값으로 정규화됨
 
 DROPOUT_WINDOW = 5
 
 
-def default_state(n_clients: int = N_CLIENTS) -> np.ndarray:
+def default_state(n_clients: int) -> np.ndarray:
     rows = np.tile([0.5, 0.5, 0.5, 0.5, 0.5, 0.0], (n_clients, 1)).astype(np.float32)
     return rows.flatten()
 
@@ -76,8 +76,8 @@ class FedAvgWithA2C(FedAvg):
         self.agent   = agent
         self.log_dir = Path(log_dir)
 
-        self._prev_state = default_state()
-        self.dropout_history: dict[int, list] = {cid: [] for cid in range(N_CLIENTS)}
+        self._prev_state = default_state(self.agent.n_clients)
+        self.dropout_history: dict[int, list] = {cid: [] for cid in range(self.agent.n_clients)}
 
         self.history_metrics: list[dict] = []
         self.selection_log:   list[dict] = []
@@ -174,8 +174,9 @@ class FedAvgWithA2C(FedAvg):
         dropout_count = sum(m.get("dropped", 0) for m in metrics_list) + len(failures)
 
         # next_state
-        padded     = metrics_list + [{}] * (N_CLIENTS - len(metrics_list))
-        next_state = normalize_metrics(padded[:N_CLIENTS])
+        n = self.agent.n_clients
+        padded     = metrics_list + [{}] * (n - len(metrics_list))
+        next_state = normalize_metrics(padded[:n])
 
         # reward (accuracy 항 없음)
         reward = compute_reward(metrics_list, dropout_count)

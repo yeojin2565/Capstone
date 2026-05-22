@@ -1,12 +1,11 @@
 """
-client.py
+src/client.py
 
 Flower 클라이언트
 - HE 실제 연산 없음
-- 클라이언트 초기화 시 가우시안 분포로 base HE latency 결정
-- 매 라운드 전송 노이즈 추가
+- 가우시안 분포 기반 HE latency 시뮬레이션
 - dropout 시뮬레이션
-- recent_dropout_rate는 서버(dqn_strategy)에서 관리 후 config로 전달
+- recent_dropout_rate는 서버에서 config로 전달
 """
 
 import sys
@@ -15,7 +14,7 @@ import os
 _project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
-    
+
 import time
 from collections import OrderedDict
 from typing import Dict
@@ -30,31 +29,19 @@ from src.he_simulator import init_base_latency, simulate_he_latency, simulate_dr
 
 
 class FlowerClient(fl.client.NumPyClient):
-    def __init__(
-        self,
-        cid: int,
-        train_subset,
-        val_subset,
-        num_classes: int,
-        batch_size: int,
-    ) -> None:
+    def __init__(self, cid, train_subset, val_subset, num_classes, batch_size):
         super().__init__()
-
-        self.cid        = cid
-        self.device     = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model      = Net(num_classes).to(self.device)
-        self.batch_size = batch_size
-
+        self.cid         = cid
+        self.device      = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model       = Net(num_classes).to(self.device)
         self.trainloader = DataLoader(train_subset, batch_size=batch_size, shuffle=True)
         self.valloader   = DataLoader(val_subset,   batch_size=batch_size, shuffle=False)
-
-        # 클라이언트 고유 HE latency (초기화 시 1회 결정)
-        self.base_he_latency = init_base_latency(cid, seed=42)
+        self.base_he     = init_base_latency(cid, seed=42)
 
     def set_parameters(self, parameters):
-        params_dict = zip(self.model.state_dict().keys(), parameters)
-        state_dict  = OrderedDict(
-            {k: torch.Tensor(v).to(self.device) for k, v in params_dict}
+        state_dict = OrderedDict(
+            {k: torch.Tensor(v).to(self.device)
+             for k, v in zip(self.model.state_dict().keys(), parameters)}
         )
         self.model.load_state_dict(state_dict, strict=True)
 
@@ -63,30 +50,18 @@ class FlowerClient(fl.client.NumPyClient):
 
     def fit(self, parameters, config):
         self.set_parameters(parameters)
-
-        lr       = config["lr"]
-        momentum = config["momentum"]
-        epochs   = config["local_epochs"]
-
         optimizer = torch.optim.SGD(
-            self.model.parameters(), lr=lr, momentum=momentum
+            self.model.parameters(),
+            lr=config["lr"], momentum=config["momentum"],
         )
-
-        start_time = time.time()
-        train(self.model, self.trainloader, optimizer, epochs, self.device)
-        train_latency = time.time() - start_time  # [fix]: train latency가 비슷할 것으로 보임, 빼는 것 고려
+        t0 = time.time()
+        train(self.model, self.trainloader, optimizer, config["local_epochs"], self.device)
+        train_latency = time.time() - t0
 
         loss, accuracy = test(self.model, self.valloader, self.device)
-
-        # HE latency 시뮬레이션: base(고정) + 전송 노이즈(매 라운드)
-        he_latency = simulate_he_latency(self.base_he_latency)
-
-        # dropout 시뮬레이션
-        dropped = simulate_dropout(self.cid)
-
-        # recent_dropout_rate: 서버가 config로 전달
-        # 첫 라운드 등 없을 경우 0.0으로 fallback
-        recent_dropout_rate = float(config.get("recent_dropout_rate", 0.0))
+        he_latency     = simulate_he_latency(self.base_he)
+        dropped        = simulate_dropout(self.cid)
+        dropout_rate   = float(config.get("recent_dropout_rate", 0.0))
 
         metrics = {
             "loss":                float(loss),
@@ -94,11 +69,10 @@ class FlowerClient(fl.client.NumPyClient):
             "train_latency":       float(train_latency),
             "he_latency":          float(he_latency),
             "data_size":           len(self.trainloader.dataset),
-            "recent_dropout_rate": recent_dropout_rate,
+            "recent_dropout_rate": dropout_rate,
             "dropped":             int(dropped),
             "cid":                 self.cid,
         }
-
         return self.get_parameters(config), len(self.trainloader.dataset), metrics
 
     def evaluate(self, parameters: NDArray, config: Dict[str, Scalar]):
@@ -107,19 +81,8 @@ class FlowerClient(fl.client.NumPyClient):
         return float(loss), len(self.valloader.dataset), {"accuracy": accuracy}
 
 
-def generate_client_fn(
-    train_subsets,
-    val_subsets,
-    num_classes: int,
-    batch_size: int,
-):
+def generate_client_fn(train_subsets, val_subsets, num_classes, batch_size):
     def client_fn(cid: str):
-        cid_int = int(cid)
-        return FlowerClient(
-            cid=cid_int,
-            train_subset=train_subsets[cid_int],
-            val_subset=val_subsets[cid_int],
-            num_classes=num_classes,
-            batch_size=batch_size,
-        )
+        i = int(cid)
+        return FlowerClient(i, train_subsets[i], val_subsets[i], num_classes, batch_size)
     return client_fn
