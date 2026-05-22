@@ -37,13 +37,13 @@ STATE_SIZE        = N_CLIENTS * N_CLIENT_FEATURES   # 500
 K_SELECT          = 10
 
 GAMMA         = 0.95
-LR            = 0.001
+LR            = 0.0003
 EPSILON_START = 1.0
 EPSILON_DECAY = 0.95
 EPSILON_MIN   = 0.05
 BATCH_SIZE    = 32
 MEMORY_SIZE   = 5000
-TARGET_UPDATE = 5
+TARGET_UPDATE = 15
 
 
 class ScoringNetwork(nn.Module):
@@ -94,7 +94,7 @@ class DQNAgent:
         self.target_model = ScoringNetwork(N_CLIENT_FEATURES)
         self.update_target_model()
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=LR)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=LR, weight_decay=1e-4)
 
     # ── PCA (no-op) ─────────────────────────────────────
     def fit_pca(self, states: np.ndarray = None):
@@ -133,7 +133,11 @@ class DQNAgent:
 
     # ── Train ──────────────────────────────────────────
     def train_step(self):
-        """epsilon 감소 없음 → dqn_strategy.py 라운드 기반으로 처리."""
+        # epsilon이 MIN에 도달 = Q값이 수렴한 시점
+        # 이후 계속 학습하면 드리프트 발생 → 학습 중단
+        if self.epsilon <= EPSILON_MIN:
+            return None
+        
         if len(self.memory) < BATCH_SIZE:
             return None
 
