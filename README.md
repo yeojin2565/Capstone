@@ -1,7 +1,5 @@
 # 실험 보고서
 
-# Experiment Setup
-
 ## 1. Architecture
 - 1 Cloud Server 100 clients
 - 클라이언트에서 2번의 epoch 수행 후 서버로 전송, FedAvg 후 글로벌 모델 업데이트(Flower 프레임워크)
