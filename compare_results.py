@@ -4,7 +4,7 @@ compare_results_new.py
 DQN 제안 방법 vs Random baseline 비교 그래프
 
 사용법:
-    python compare_results_new.py \
+    python compare_results.py \
     --dqn_path outputs/YYYY-MM-DD/HH-MM-SS/results.pkl \
     --random_path outputs/YYYY-MM-DD/HH-MM-SS/results_random.pkl
 

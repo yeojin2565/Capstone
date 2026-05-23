@@ -30,18 +30,14 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from collections import deque
-import yaml
-
-with open("base.yaml") as f:
-    cfg = yaml.safe_load(f)
 
     
 # ── Hyperparameters ─────────────────────────────────────
-# [CHANGE]: 하드코딩 -> yaml에서 불러오기
-N_CLIENTS          = cfg["num_clients"]
+# [FIXME]: 하드코딩
+N_CLIENTS          = 100
 N_CLIENT_FEATURES  = 2              # he_latency_norm, data_size_norm
 STATE_SIZE         = N_CLIENTS * N_CLIENT_FEATURES   # 200
-K_SELECT           = cfg["num_clients_per_round_fit"]
+K_SELECT           = 10
 
 GAMMA         = 0.95
 LR            = 0.001              # 작은 네트워크에 맞게 LR 증가 (0.0005 → 0.001)

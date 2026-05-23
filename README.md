@@ -109,7 +109,7 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 ### (c) Reward
 |Notation|의미|
 |---|---|
-|$R_t$|rount $t$의 reward|
+|$R_t$|round $t$의 reward|
 |$\Delta Acc_t$|accuracy 변화량|
 |$\bar{Q}_t$|평균 quality bonus|
 |$\bar{H}_t$|평균 HE latency|
@@ -119,7 +119,7 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |$d_i$|client $i$의 normalized data size|
 |$h_i$|client $i$의 normalized HE latency|
 
-$$
+$
 R_t
 = w_{\mathrm{acc}} \,\Delta \mathrm{Acc}_t
 + w_{\mathrm{q}} \,\overline{Q}_t
@@ -127,14 +127,16 @@ R_t
 - w_{\mathrm{drop}} \, D_t
 + B_t^{\mathrm{fast}}
 - P_t^{\mathrm{slow}}
-$$
+$
+
 where
-$$
+
+$
 Q_i = d_i (1 - h_i), \quad
 D_t = \frac{n_t^{\mathrm{drop}}}{k}, \quad
 B_t^{\mathrm{fast}} = \alpha \frac{n_t^{\mathrm{fast}}}{k}, \quad
 P_t^{\mathrm{slow}} = \beta \frac{n_t^{\mathrm{slow}}}{k}.
-$$
+$
 
 # 실험 결과
 
@@ -159,3 +161,14 @@ $$
 |batch size|32|
 |memory size|5000|
 |target update|5 step|
+
+## 결과
+──────────────────────────────────────
+                            DQN     Random
+──────────────────────────────────────
+최종 Accuracy              0.7090     0.7299
+최고 Accuracy              0.7196     0.7367
+평균 HE Latency            0.0888     0.1765
+평균 Reward                0.1468     0.0497
+──────────────────────────────────────
+![alt text](image.png)
