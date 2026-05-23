@@ -95,11 +95,11 @@ def simulate_he_latency(base_latency: float) -> float:
 ## 4. DQN
 ### (a) State
 - $C_i = [h_i, d_i]$ 
-- $h_i = \text{HE latency of i-th client}, d_i = \text{data size of i-th client}$
+- $h_i = [\text{HE latency of i-th client}, d_i = \text{data size of i-th client}]$
 
 ### (b) Action
 - DQN output: 100개 clients 각각에 대한 score
-- $Q ≈ \frac{1}{k}\sum_{i∈a} \text{score}(i)$
+- $Q(s, a) ≈ \frac{1}{k}\sum_{i∈a} \text{score}(i)$
 ```python
 """dqn.py"""
 curr_scores = self.model(states_t)                        # [B, n_clients]
@@ -107,11 +107,33 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 ```
 
 ### (c) Reward
-- $R = w_1 * \Delta\text{accuracy} + w_2 * \text{avg quality bounus} - w_3 * \text{avg HE latency} - w_4 * \text{dropout rate} + \text{fast bouns} - \text{slow penalty}$
-- $\text{quality bonus} = \text{data size}*(1 - \text{HE latency})$
-- $\text{dropout rate} = \frac{\text{dropout count}}{k}, k = \text{num of selected clients}$
-- $\text{fast bonus} = \alpha*\frac{\text{num of fast clients}}{k}, \alpha = \text{HE bonus value}=0.25$
-- $\text{slow penalty} = \beta*\frac{num of slow clients}{k}, \beta=\text{HE slow penalty value}=0.20$
+|Notation|의미|
+|---|---|
+|$R_t$|rount $t$의 reward|
+|$\Delta Acc_t$|accuracy 변화량|
+|$\bar{Q}_t$|평균 quality bonus|
+|$\bar{H}_t$|평균 HE latency|
+|$D_t$|dropout rate|
+|$k$|선택된 클라이언트수|
+|$S_t$|round $t$에 선택된 클라이언트 집합|
+|$d_i$|client $i$의 normalized data size|
+|$h_i$|client $i$의 normalized HE latency|
+$
+R_t
+= w_{\mathrm{acc}} \,\Delta \mathrm{Acc}_t
++ w_{\mathrm{q}} \,\overline{Q}_t
+- w_{\mathrm{he}} \,\overline{H}_t
+- w_{\mathrm{drop}} \, D_t
++ B_t^{\mathrm{fast}}
+- P_t^{\mathrm{slow}}
+$
+where
+$
+Q_i = d_i (1 - h_i), \quad
+D_t = \frac{n_t^{\mathrm{drop}}}{k}, \quad
+B_t^{\mathrm{fast}} = \alpha \frac{n_t^{\mathrm{fast}}}{k}, \quad
+P_t^{\mathrm{slow}} = \beta \frac{n_t^{\mathrm{slow}}}{k}.
+$
 
 # 실험 결과
 
