@@ -118,7 +118,8 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |$S_t$|round $t$에 선택된 클라이언트 집합|
 |$d_i$|client $i$의 normalized data size|
 |$h_i$|client $i$의 normalized HE latency|
-$
+
+$$
 R_t
 = w_{\mathrm{acc}} \,\Delta \mathrm{Acc}_t
 + w_{\mathrm{q}} \,\overline{Q}_t
@@ -126,14 +127,14 @@ R_t
 - w_{\mathrm{drop}} \, D_t
 + B_t^{\mathrm{fast}}
 - P_t^{\mathrm{slow}}
-$
+$$
 where
-$
+$$
 Q_i = d_i (1 - h_i), \quad
 D_t = \frac{n_t^{\mathrm{drop}}}{k}, \quad
 B_t^{\mathrm{fast}} = \alpha \frac{n_t^{\mathrm{fast}}}{k}, \quad
 P_t^{\mathrm{slow}} = \beta \frac{n_t^{\mathrm{slow}}}{k}.
-$
+$$
 
 # 실험 결과
 
