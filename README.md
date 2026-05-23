@@ -32,7 +32,8 @@ GROUP_CONFIG = {
 ```python
 """client.py"""
 metrics = {
-    "loss":          float(loss),            "accuracy":      float(accuracy),
+    "loss":          float(loss),
+    "accuracy":      float(accuracy),
     "train_latency": float(train_latency),
     "he_latency":    float(he_latency),
     "data_size":     len(self.train_indices),
