@@ -73,15 +73,7 @@ def main(cfg: DictConfig):
         k_select=cfg.num_clients_per_round_fit,
     )
 
-    # 4. PCA 사전 학습
-    print("[PCA] 초기 state 샘플 생성 중...")
-    n_pca_samples = 500
-    base = default_client_state(N_CLIENTS).flatten()            # (500,)
-    rand = np.random.uniform(0, 1, (n_pca_samples, STATE_SIZE)).astype(np.float32)
-    rand[0] = base
-    agent.fit_pca(rand)
-
-    # 5. 전략
+    # 4. 전략
     strategy = FedAvgWithDQN(
         dqn_agent=agent,
         fraction_fit=0.00001,
@@ -93,7 +85,7 @@ def main(cfg: DictConfig):
         evaluate_fn=get_evaluate_fn(cfg.num_classes, testloader),
     )
 
-    # 6. 시뮬레이션
+    # 5. 시뮬레이션
     history = fl.simulation.start_simulation(
         client_fn=client_fn,
         num_clients=cfg.num_clients,
@@ -102,7 +94,7 @@ def main(cfg: DictConfig):
         strategy=strategy,
     )
 
-    # 7. 저장
+    # 6. 저장
     save_path    = HydraConfig.get().runtime.output_dir
     results_path = Path(save_path) / "results.pkl"
 

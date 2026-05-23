@@ -1,22 +1,22 @@
 """
 dqn_strategy.py
 
-[변경 이력]
-    [BUG-1]  configure_fit: CID 기준 정렬, 중복 제거 + k_select 미달 보충.
-    [BUG-2]  aggregate_fit: cid 누락/범위 초과 메트릭 경고 로그.
-    [TUNE-1] epsilon: aggregate_fit() 라운드 기반 감소.
-    [TUNE-2] 리워드: HE 패널티(w3=0.55) + fast_bonus + slow_penalty.
-    [FEAT]   client_state 5피처 복원:
-             [loss_norm, acc_norm, train_latency_norm, he_latency_norm, data_size_norm]
-             = 원본 코드의 5개 피처를 Per-client scoring에 맞게 그대로 복원.
-             Per-client 구조이므로 피처가 섞이지 않고 클라이언트별 독립 학습.
+[핵심 변경] Per-client scoring network에 맞게 state 관리 변경.
 
-             ScoringNetwork가 학습하는 것:
-               he_norm  ↓ → score ↑  (HE 빠른 클라이언트 선호)
-               data_norm ↑ → score ↑  (데이터 많은 클라이언트 선호)
-               acc_norm  ↑ → score ↑  (정확도 높은 클라이언트 선호)
-               loss_norm ↓ → score ↑  (손실 낮은 클라이언트 선호)
-               train_lat ↓ → score ↑  (학습 빠른 클라이언트 선호)
+state 구조:
+    _client_state: np.ndarray [N_CLIENTS, 2]
+    state[i] = [he_latency_norm, data_size_norm] for client i
+
+    초기값: [0.5, 0.5] (미관찰 → 중립값)
+    관찰 즉시 실제값으로 업데이트
+
+    → ScoringNetwork가 각 클라이언트의 [he, data]를 입력으로 받아
+      "he 낮으면 높은 점수"를 빠르게 학습
+
+리워드:
+    - w3(HE) = 0.55 (강한 HE 패널티)
+    - fast_bonus + slow_penalty (양방향 신호)
+    - 커리큘럼 없음 (처음부터 일관된 HE 중심)
 """
 
 import gc
@@ -26,48 +26,24 @@ from flwr.server.strategy import FedAvg
 from flwr.common import FitIns, FitRes, Parameters
 
 from dqn import DQNAgent, K_SELECT, N_CLIENTS, EPSILON_DECAY, EPSILON_MIN
+from he_simulator import HE_LATENCY_MAX
 
-# 원본 정규화 스케일 복원
-SCALE = np.array([5.0, 1.0, 10.0, 6.0, 4000.0], dtype=np.float32)
-# 피처 순서: [loss, accuracy, train_latency, he_latency, data_size]
+# hyperparameters
+HE_MAX   = HE_LATENCY_MAX
+DATA_MAX = 4000.0     # [REVIEW]: 왜 4000?
 
-HE_MAX   = 6.0
-DATA_MAX = 4000.0
-
-HE_BONUS_THRESHOLD = 0.10
-HE_BONUS_VALUE     = 0.25
-HE_SLOW_THRESHOLD  = 0.30
-HE_SLOW_PENALTY    = 0.20
-
-# 피처 인덱스 (가독성)
-IDX_LOSS      = 0
-IDX_ACC       = 1
-IDX_TRAIN_LAT = 2
-IDX_HE        = 3
-IDX_DATA      = 4
+HE_BONUS_THRESHOLD = 0.10   # excellent + fast 그룹 (latency < 0.6s)
+HE_BONUS_VALUE     = 0.25   # fast bonus 식에 사용
+HE_SLOW_THRESHOLD  = 0.30   # slow + extreme 그룹 (latency > 1.8s)
+HE_SLOW_PENALTY    = 0.20   # slow penalty 식에 사용
 
 
 def default_client_state(n_clients: int = N_CLIENTS) -> np.ndarray:
     """
-    5피처 초기값: [loss=1.0, acc=0.5, train_lat=0.5, he=0.5, data=0.5]
-    원본 코드와 동일한 초기값 사용.
-    관찰될 때마다 실제 측정값으로 갱신됨.
+    [n_clients, 2]: [he_latency_norm, data_size_norm]
+    초기값 0.5 (중립). 클라이언트가 관찰되면 실제값으로 갱신.
     """
-    return np.tile(
-        [1.0, 0.5, 0.5, 0.5, 0.5], (n_clients, 1)
-    ).astype(np.float32)
-
-
-def normalize_row(m: dict) -> np.ndarray:
-    """원본 코드와 동일한 정규화."""
-    row = np.array([
-        m.get("loss",          1.0),
-        m.get("accuracy",      0.5),
-        m.get("train_latency", 0.5),
-        m.get("he_latency",    0.5),
-        m.get("data_size",     1000.0),
-    ], dtype=np.float32)
-    return np.clip(row / SCALE, 0.0, 1.0)
+    return np.full((n_clients, 2), 0.5, dtype=np.float32)
 
 
 def compute_reward(
@@ -80,6 +56,8 @@ def compute_reward(
     w3: float = 0.55,
     w4: float = 0.05,
 ) -> tuple[float, float]:
+    # w1, w2, w3, w4: handling parameters
+    # norms = normalized
     he_norms   = [np.clip(m.get("he_latency", 0.5) / HE_MAX,   0.0, 1.0) for m in metrics_list if m]
     data_norms = [np.clip(m.get("data_size",  500)  / DATA_MAX, 0.0, 1.0) for m in metrics_list if m]
     accs       = [m.get("accuracy", 0.0) for m in metrics_list if m]
@@ -102,12 +80,12 @@ def compute_reward(
     slow_penalty = HE_SLOW_PENALTY * (slow_count / max(k_select, 1))
 
     reward = (
-          w1 * acc_gain_norm
-        + w2 * avg_quality_bonus
-        - w3 * avg_he_norm
-        - w4 * dropout_rate
-        + fast_bonus
-        - slow_penalty
+          w1 * acc_gain_norm       # Δaccuracy
+        + w2 * avg_quality_bonus   # data size 크고 HE latency 낮을 수록 bonus 상승
+        - w3 * avg_he_norm         # HE latency
+        - w4 * dropout_rate        
+        + fast_bonus               
+        - slow_penalty             
     )
     return reward, curr_acc
 
@@ -119,8 +97,8 @@ class FedAvgWithDQN(FedAvg):
         self.agent    = dqn_agent
         self.k_select = dqn_agent.k_select
 
-        self._client_state = default_client_state(N_CLIENTS)   # [100, 5]
-        self._prev_state   = self._client_state.flatten()       # [500]
+        self._client_state = default_client_state(N_CLIENTS)   # [100, 2]
+        self._prev_state   = self._client_state.flatten()       # [200]
         self._prev_action  = list(range(self.k_select))
         self._prev_acc     = 0.0
 
@@ -132,7 +110,6 @@ class FedAvgWithDQN(FedAvg):
             min_num_clients=client_manager.num_available(),
         ))
 
-        # [BUG-1 FIX] CID 기준 정렬
         all_clients.sort(key=lambda c: int(c.cid))
         n = len(all_clients)
 
@@ -171,8 +148,7 @@ class FedAvgWithDQN(FedAvg):
         metrics_list  = [fit_res.metrics or {} for _, fit_res in results]
         dropout_count = sum(m.get("dropped", 0) for m in metrics_list) + len(failures)
 
-        # ── [BUG-2 FIX + FEAT] 5피처 state 업데이트 ─────────────────
-        # 원본 normalize_row() 사용: 5개 피처 모두 정규화하여 저장
+        # ── state 업데이트: 관찰된 클라이언트만 갱신 ────────────────
         for m in metrics_list:
             cid = m.get("cid")
             if cid is None:
@@ -181,9 +157,11 @@ class FedAvgWithDQN(FedAvg):
             if not (0 <= cid < N_CLIENTS):
                 print(f"[경고] cid 범위 초과 (cid={cid}), 무시합니다.")
                 continue
-            self._client_state[cid] = normalize_row(m)   # [loss, acc, train_lat, he, data]
+            he_norm   = float(np.clip(m.get("he_latency", 0.5) / HE_MAX,   0.0, 1.0))
+            data_norm = float(np.clip(m.get("data_size",  500)  / DATA_MAX, 0.0, 1.0))
+            self._client_state[cid] = [he_norm, data_norm]
 
-        next_state = self._client_state.flatten()   # [500]
+        next_state = self._client_state.flatten()   # [200]
 
         reward, curr_acc = compute_reward(
             metrics_list, dropout_count, self._prev_acc, self.k_select

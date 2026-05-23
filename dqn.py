@@ -1,26 +1,27 @@
 """
 dqn.py
 
-DQN 에이전트 - 클라이언트별 독립 스코어링 (5피처 버전)
+DQN 에이전트 - 클라이언트별 독립 스코어링 네트워크
 
-[변경 이력]
-    [BUG-6]  fit_pca() 미호출 시 RuntimeError → no-op으로 처리
-    [BUG-7]  미사용 import 제거
-    [ARCH]   FC 네트워크 → Per-client ScoringNetwork
-             이유: FC는 모든 입력을 섞어 "client i의 HE → Q[i]" 학습 불가
-                  Per-client는 클라이언트별 독립 처리 → 단순하고 빠른 수렴
-    [FEAT]   N_CLIENT_FEATURES 2 → 5 (원래 5개 피처 복원)
-             [loss_norm, acc_norm, train_latency_norm, he_latency_norm, data_size_norm]
-             Per-client 구조 덕분에 5개 피처도 FC처럼 섞이지 않고
-             클라이언트별로 독립 처리 → 학습 가능
-    [TUNE]   epsilon 감소 train_step()에서 제거
-             → dqn_strategy.py aggregate_fit()에서 라운드 기반 처리
-    [TUNE]   EPSILON_DECAY=0.95, BATCH_SIZE=32, MEMORY_SIZE=5000
+# 클라이언트별 독립 스코어링 (Per-client Scoring)
+    각 client i에 대해: [he_i_norm, data_i_norm] → score(i)
+    동일한 작은 네트워크를 100개 클라이언트에 공유 적용 (weight sharing)
+    → client i의 스코어는 오직 client i의 피처로만 결정
+    → 네트워크가 배워야 할 것: "he_norm 낮으면 score 높게"
+    → 매우 단순한 패턴 → 수십 번 학습으로 수렴
+
+# ScoringNetwork 구조:
+    입력: [he_norm, data_norm]  (2차원)
+    2 → 64 → 32 → 1  (score)
+    동일 네트워크를 100개 클라이언트에 동시 적용 (batched)
 
 타임라인 (200라운드):
     Round  1~32 : 메모리 축적, epsilon=1.0
+                  탐색 중 각 클라이언트의 [he_norm, data_norm] 관찰
     Round 33~91 : 학습 + epsilon 0.95씩 감소 → 0.05
+                  "he_norm 낮은 클라이언트 → 높은 score" 빠르게 수렴
     Round 92~200: 109라운드 exploitation
+                  fast 그룹(cid 0~34) 집중 선택 → HE latency 명확히 감소
 """
 
 import random
@@ -29,33 +30,38 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from collections import deque
+import yaml
 
+with open("base.yaml") as f:
+    cfg = yaml.safe_load(f)
+
+    
 # ── Hyperparameters ─────────────────────────────────────
-N_CLIENTS         = 100
-N_CLIENT_FEATURES = 5              # loss, accuracy, train_latency, he_latency, data_size
-STATE_SIZE        = N_CLIENTS * N_CLIENT_FEATURES   # 500
-K_SELECT          = 10
+# [CHANGE]: 하드코딩 -> yaml에서 불러오기
+N_CLIENTS          = cfg["num_clients"]
+N_CLIENT_FEATURES  = 2              # he_latency_norm, data_size_norm
+STATE_SIZE         = N_CLIENTS * N_CLIENT_FEATURES   # 200
+K_SELECT           = cfg["num_clients_per_round_fit"]
 
 GAMMA         = 0.95
-LR            = 0.001
+LR            = 0.001              # 작은 네트워크에 맞게 LR 증가 (0.0005 → 0.001)
 EPSILON_START = 1.0
 EPSILON_DECAY = 0.95
 EPSILON_MIN   = 0.05
 BATCH_SIZE    = 32
 MEMORY_SIZE   = 5000
-TARGET_UPDATE = 5
+TARGET_UPDATE = 5     # step(minibatch update)
 
 
 class ScoringNetwork(nn.Module):
     """
     클라이언트별 독립 스코어링 네트워크
-    입력: [loss_norm, acc_norm, train_lat_norm, he_norm, data_norm]  (5차원)
-    출력: score (1차원)
+    입력: [he_norm, data_norm] (2차원)
+    출력: score (1차원, 높을수록 선택 우선)
 
-    동일 가중치를 100개 클라이언트에 공유 적용 (weight sharing)
-    → 클라이언트 i의 스코어는 오직 클라이언트 i의 5개 피처만으로 결정
-    → 네트워크가 학습하는 것:
-        "he_norm 낮고 data_norm 높고 acc_norm 높은 클라이언트 = 높은 score"
+    동일 가중치를 100개 클라이언트에 공유 적용 (weight sharing).
+    → 네트워크가 "특정 클라이언트를 위한 특수 룰" 이 아닌
+      "어떤 피처를 가진 클라이언트가 좋은가"를 학습.
     """
     def __init__(self, n_features: int = N_CLIENT_FEATURES):
         super().__init__()
@@ -70,7 +76,7 @@ class ScoringNetwork(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         x: [batch, n_clients, n_features]
-        반환: [batch, n_clients]
+        반환: [batch, n_clients]  (각 클라이언트의 스코어)
         """
         return self.fc(x).squeeze(-1)
 
@@ -78,17 +84,17 @@ class ScoringNetwork(nn.Module):
 class DQNAgent:
     def __init__(
         self,
-        state_size:   int = STATE_SIZE,   # backward compatibility
+        state_size:   int = STATE_SIZE,   # backward compatibility용, 내부에서 재계산
         n_clients:    int = N_CLIENTS,
         k_select:     int = K_SELECT,
         n_components: int = 0,            # 미사용 (backward compatibility)
     ):
-        self.n_clients  = n_clients
-        self.k_select   = k_select
-        self.state_size = n_clients * N_CLIENT_FEATURES   # 항상 500
-        self.epsilon    = EPSILON_START
-        self.memory     = deque(maxlen=MEMORY_SIZE)
-        self.step_count = 0
+        self.n_clients   = n_clients
+        self.k_select    = k_select
+        self.state_size  = n_clients * N_CLIENT_FEATURES   # 항상 200
+        self.epsilon     = EPSILON_START
+        self.memory      = deque(maxlen=MEMORY_SIZE)
+        self.step_count  = 0
 
         self.model        = ScoringNetwork(N_CLIENT_FEATURES)
         self.target_model = ScoringNetwork(N_CLIENT_FEATURES)
@@ -96,13 +102,12 @@ class DQNAgent:
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=LR)
 
-    # ── PCA (no-op) ─────────────────────────────────────
+    # ── PCA (no-op, backward compatibility) ────────────
     def fit_pca(self, states: np.ndarray = None):
-        """Per-client scoring 사용으로 PCA 불필요. train_dqn.py 호환용."""
-        print("[DQN] Per-client scoring(5피처) 사용 중. fit_pca() 무시됨.")
-
+        pass
+    
     def _reshape(self, state: np.ndarray) -> np.ndarray:
-        """flat [n_clients * 5] → [n_clients, 5]"""
+        """flat state [n_clients * 2] → [n_clients, 2]"""
         return state.flatten()[:self.state_size].reshape(
             self.n_clients, N_CLIENT_FEATURES
         ).astype(np.float32)
@@ -115,9 +120,10 @@ class DQNAgent:
         if np.random.rand() <= self.epsilon:
             return random.sample(range(self.n_clients), self.k_select)
 
-        s_t = torch.FloatTensor(self._reshape(state)).unsqueeze(0)  # [1, 100, 5]
+        # [n_clients, 2] → [1, n_clients, 2]
+        s_t = torch.FloatTensor(self._reshape(state)).unsqueeze(0)
         with torch.no_grad():
-            scores = self.model(s_t).squeeze(0)   # [100]
+            scores = self.model(s_t).squeeze(0)   # [n_clients]
         return torch.topk(scores, self.k_select).indices.tolist()
 
     # ── Memory ─────────────────────────────────────────
@@ -141,17 +147,20 @@ class DQNAgent:
         states, actions, rewards, next_states, dones = zip(*batch)
 
         B = BATCH_SIZE
+        # [B, n_clients * 2] → [B, n_clients, 2]
         states_t      = torch.FloatTensor(np.array(states)).view(B, self.n_clients, N_CLIENT_FEATURES)
-        actions_t     = torch.FloatTensor(np.array(actions))
+        actions_t     = torch.FloatTensor(np.array(actions))   # [B, n_clients]
         rewards_t     = torch.FloatTensor(rewards)
         next_states_t = torch.FloatTensor(np.array(next_states)).view(B, self.n_clients, N_CLIENT_FEATURES)
         dones_t       = torch.FloatTensor(dones)
 
-        curr_scores = self.model(states_t)                          # [B, 100]
+        # 선택된 클라이언트들의 평균 Q값 (현재)
+        curr_scores = self.model(states_t)                        # [B, n_clients]
         curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 
+        # 타깃 Q값
         with torch.no_grad():
-            next_scores = self.target_model(next_states_t)          # [B, 100]
+            next_scores = self.target_model(next_states_t)        # [B, n_clients]
             next_q      = next_scores.max(1)[0]
             target_q    = rewards_t + (1 - dones_t) * GAMMA * next_q
 

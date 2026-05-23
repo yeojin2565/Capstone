@@ -16,11 +16,13 @@ from flwr.server.client_proxy import ClientProxy
 from flwr.common import FitIns, FitRes, Parameters
 
 from dqn import K_SELECT
+from dqn_strategy import HE_MAX, DATA_MAX, HE_BONUS_THRESHOLD, HE_BONUS_VALUE, HE_SLOW_THRESHOLD, HE_SLOW_PENALTY
 
-HE_MAX             = 6.0
-DATA_MAX           = 4000.0
-HE_BONUS_THRESHOLD = 0.05
-HE_BONUS_VALUE     = 0.10
+# [CHANGE]: 하드 코딩 고침
+HE_MAX             = HE_MAX
+DATA_MAX           = DATA_MAX
+HE_BONUS_THRESHOLD = HE_BONUS_THRESHOLD
+HE_BONUS_VALUE     = HE_BONUS_VALUE
 
 
 class FedAvgWithRandom(FedAvg):
@@ -76,13 +78,22 @@ class FedAvgWithRandom(FedAvg):
 
         fast_count = sum(1 for h in he_norms if h < HE_BONUS_THRESHOLD)
         fast_bonus = HE_BONUS_VALUE * (fast_count / max(self.k_select, 1))
+        
+        slow_count   = sum(1 for h in he_norms if h > HE_SLOW_THRESHOLD)
+        slow_penalty = HE_SLOW_PENALTY * (slow_count / max(self.k_select, 1))
 
+        # [BUG/HACK]: dqn strategy와 다른 리워드 식 / 하드 코딩으로 동일하게 수정
+        w1 = 0.30
+        w2 = 0.10
+        w3 = 0.55
+        w4 = 0.05
         reward = (
-              0.35 * acc_gain_norm
-            + 0.15 * avg_quality_bonus
-            - 0.45 * avg_he_norm
-            - 0.05 * dropout_rate
+              w1 * acc_gain_norm
+            + w2 * avg_quality_bonus
+            - w3 * avg_he_norm
+            - w4 * dropout_rate
             + fast_bonus
+            - slow_penalty
         )
 
         self.history_metrics.append({

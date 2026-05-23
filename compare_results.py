@@ -1,12 +1,16 @@
 """
-compare_results.py
+compare_results_new.py
 
 DQN 제안 방법 vs Random baseline 비교 그래프
 
 사용법:
-    python compare_results.py \
+    python compare_results_new.py \
     --dqn_path outputs/YYYY-MM-DD/HH-MM-SS/results.pkl \
     --random_path outputs/YYYY-MM-DD/HH-MM-SS/results_random.pkl
+
+수정 사항:
+    [BUG-10 치명] plot_epsilon_graph(): epsilon 키 존재 여부 가드 누락 → KeyError.
+                  compare_results.py에 있던 가드를 동일하게 적용.
 """
 
 import pickle
@@ -18,18 +22,16 @@ from pathlib import Path
 
 
 # ── 색상 ──────────────────────────────────────────────
-COLOR_DQN    = "#1D9E75"   # 초록  (제안 방법)
-COLOR_RANDOM = "#D85A30"   # 주황  (baseline)
-COLOR_SHADE  = 0.10        # fill_between 투명도
+COLOR_DQN    = "#1D9E75"
+COLOR_RANDOM = "#D85A30"
+COLOR_SHADE  = 0.10
 
 
-# ── 로드 ──────────────────────────────────────────────
 def load(path: str) -> dict:
     with open(path, "rb") as f:
         return pickle.load(f)
 
 
-# ── history 파싱 ───────────────────────────────────────
 def parse_history(history):
     rounds_loss, losses = [], []
     if history.losses_centralized:
@@ -44,7 +46,6 @@ def parse_history(history):
     return rounds_loss, losses, rounds_acc, accuracies
 
 
-# ── 수렴 라운드 ────────────────────────────────────────
 def convergence_round(accuracies: list, threshold: float) -> int | None:
     for i, a in enumerate(accuracies):
         if a >= threshold:
@@ -52,19 +53,15 @@ def convergence_round(accuracies: list, threshold: float) -> int | None:
     return None
 
 
-# ── 이동 평균 추세선 ───────────────────────────────────
 def add_moving_average(ax, x: list, y: list, color: str, window: int = 5):
-    """
-    단순 이동 평균(SMA) 추세선 추가
-    window: 이동 평균 윈도우 크기 (데이터 수보다 크면 자동 축소)
-    """
     if len(y) < 2:
         return
+    x = list(x)
+    y = list(y)
     window = min(window, len(y))
     kernel = np.ones(window) / window
     ma     = np.convolve(y, kernel, mode="valid")
-    # convolve valid 모드: len(y) - window + 1 개 반환 → x 앞부분 맞추기
-    x_ma   = x[window - 1:]
+    x_ma   = x[window - 1: window - 1 + len(ma)]   # 길이 명시적 맞춤
     ax.plot(
         x_ma, ma,
         color=color, linewidth=2.2,
@@ -73,29 +70,26 @@ def add_moving_average(ax, x: list, y: list, color: str, window: int = 5):
     )
 
 
-# ── 비교 그래프 ────────────────────────────────────────
 def plot_comparison(
     dqn_results: dict,
     random_results: dict,
     save_dir: str = ".",
-    conv_threshold: float = 0.80,
+    conv_threshold: float = 0.90,
 ):
-    # 데이터 파싱
     d_rl, d_loss, d_ra, d_acc = parse_history(dqn_results["history"])
     r_rl, r_loss, r_ra, r_acc = parse_history(random_results["history"])
 
     dqn_metrics    = dqn_results.get("dqn_metrics", [])
     random_metrics = random_results.get("dqn_metrics", [])
 
-    dqn_he    = [m["avg_he_latency"] for m in dqn_metrics]
-    random_he = [m["avg_he_latency"] for m in random_metrics]
+    dqn_he    = [m["avg_he_latency_norm"] for m in dqn_metrics]
+    random_he = [m["avg_he_latency_norm"] for m in random_metrics]
     dqn_rew   = [m["reward"]              for m in dqn_metrics]
     random_rew= [m["reward"]              for m in random_metrics]
 
     dqn_rounds_he    = [m["round"] for m in dqn_metrics]
     random_rounds_he = [m["round"] for m in random_metrics]
 
-    # ── 레이아웃 ──────────────────────────────────────
     fig, axes = plt.subplots(2, 2, figsize=(13, 9))
     fig.suptitle(
         "DQN Client Selection vs Random Baseline",
@@ -105,19 +99,18 @@ def plot_comparison(
     def legend_labels():
         from matplotlib.lines import Line2D
         return [
-            Line2D([0], [0], color=COLOR_DQN,    linewidth=2, label="DQN (proposed)"),
-            Line2D([0], [0], color=COLOR_RANDOM,  linewidth=2, label="Random (baseline)"),
+            Line2D([0], [0], color=COLOR_DQN,   linewidth=2, label="DQN (proposed)"),
+            Line2D([0], [0], color=COLOR_RANDOM, linewidth=2, label="Random (baseline)"),
         ]
 
-    # ── 1. Global Loss ─────────────────────────────────
     ax = axes[0][0]
     if d_loss:
         ax.plot(d_rl, d_loss, color=COLOR_DQN,   linewidth=1.5, alpha=0.35)
-        # ax.fill_between(d_rl, d_loss, alpha=COLOR_SHADE, color=COLOR_DQN)
+        ax.fill_between(d_rl, d_loss, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, d_rl, d_loss, COLOR_DQN)
     if r_loss:
         ax.plot(r_rl, r_loss, color=COLOR_RANDOM, linewidth=1.5, alpha=0.35)
-        # ax.fill_between(r_rl, r_loss, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        ax.fill_between(r_rl, r_loss, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, r_rl, r_loss, COLOR_RANDOM)
     ax.set_title("Global Loss", fontsize=12)
     ax.set_xlabel("Round")
@@ -126,23 +119,21 @@ def plot_comparison(
     ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
     ax.grid(True, alpha=0.3)
 
-    # ── 2. Global Accuracy ─────────────────────────────
     ax = axes[0][1]
     dqn_conv    = convergence_round(d_acc, conv_threshold)
     random_conv = convergence_round(r_acc, conv_threshold)
 
     if d_acc:
-        ax.plot(d_ra, d_acc, color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
-        # ax.fill_between(d_ra, d_acc, alpha=COLOR_SHADE, color=COLOR_DQN)
+        ax.plot(d_ra, d_acc, color=COLOR_DQN,   linewidth=1.5, alpha=0.35)
+        ax.fill_between(d_ra, d_acc, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, d_ra, d_acc, COLOR_DQN)
     if r_acc:
-        ax.plot(r_ra, r_acc, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
-        # ax.fill_between(r_ra, r_acc, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        ax.plot(r_ra, r_acc, color=COLOR_RANDOM, linewidth=1.5, alpha=0.35)
+        ax.fill_between(r_ra, r_acc, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, r_ra, r_acc, COLOR_RANDOM)
 
     ax.axhline(conv_threshold, color="gray", linestyle=":", linewidth=1.2,
                label=f"threshold ({conv_threshold:.0%})")
-
     if dqn_conv:
         ax.axvline(dqn_conv,    color=COLOR_DQN,    linestyle=":", linewidth=1.0,
                    label=f"DQN convergence: Round {dqn_conv}")
@@ -158,34 +149,32 @@ def plot_comparison(
     ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
     ax.grid(True, alpha=0.3)
 
-    # ── 3. HE Latency (핵심 비교) ──────────────────────
     ax = axes[1][0]
     if dqn_he:
         ax.plot(dqn_rounds_he,    dqn_he,    color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
-        # ax.fill_between(dqn_rounds_he, dqn_he, alpha=COLOR_SHADE, color=COLOR_DQN)
+        ax.fill_between(dqn_rounds_he, dqn_he, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, dqn_rounds_he, dqn_he, COLOR_DQN)
     if random_he:
         ax.plot(random_rounds_he, random_he, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
-        # ax.fill_between(random_rounds_he, random_he, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        ax.fill_between(random_rounds_he, random_he, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, random_rounds_he, random_he, COLOR_RANDOM)
 
     ax.set_title("Avg HE Latency (normalized)", fontsize=12)
     ax.set_xlabel("Round")
     ax.set_ylabel("HE Latency (norm)")
-    # ax.set_ylim(0, 1.05)
+    ax.set_ylim(0, 1.05)
     ax.legend(handles=legend_labels(), fontsize=9)
     ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
     ax.grid(True, alpha=0.3)
 
-    # ── 4. Reward ──────────────────────────────────────
     ax = axes[1][1]
     if dqn_rew:
         ax.plot(dqn_rounds_he,    dqn_rew,    color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
-        # ax.fill_between(dqn_rounds_he, dqn_rew, alpha=COLOR_SHADE, color=COLOR_DQN)
+        ax.fill_between(dqn_rounds_he, dqn_rew, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, dqn_rounds_he, dqn_rew, COLOR_DQN)
     if random_rew:
         ax.plot(random_rounds_he, random_rew, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
-        # ax.fill_between(random_rounds_he, random_rew, alpha=COLOR_SHADE, color=COLOR_RANDOM)
+        ax.fill_between(random_rounds_he, random_rew, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, random_rounds_he, random_rew, COLOR_RANDOM)
 
     ax.axhline(0, color="gray", linestyle="--", linewidth=0.8)
@@ -204,7 +193,6 @@ def plot_comparison(
     plt.show()
     print(f"비교 그래프 저장 완료: {out}")
 
-    # ── 수치 요약 ──────────────────────────────────────
     print("\n──────────────────────────────────────")
     print(f"{'':20s} {'DQN':>10s} {'Random':>10s}")
     print("──────────────────────────────────────")
@@ -221,22 +209,24 @@ def plot_comparison(
         print(f"{'평균 Reward':20s} {np.mean(dqn_rew):>10.4f} {np.mean(random_rew):>10.4f}")
     print("──────────────────────────────────────")
 
-# ── DQN Epsilon per Round ──────────────────────────────
+
 def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
     dqn_metrics = dqn_results.get("dqn_metrics", [])
     if not dqn_metrics:
         print("dqn_metrics 데이터가 없습니다.")
         return
 
-    # epsilon 키가 없으면 조기 종료
+    # ── [BUG-10 FIX] epsilon 키 존재 여부 가드 추가 ────────────────
+    # 수정 전: m["epsilon"] 직접 접근 → random pkl 사용 시 KeyError
+    # 수정 후: compare_results.py와 동일하게 가드 적용
     if "epsilon" not in dqn_metrics[0]:
-        print("epsilon 데이터가 없습니다. dqn_strategy.py에 epsilon 저장 코드를 추가하세요.")
+        print("epsilon 데이터가 없습니다. dqn_strategy.py에 epsilon 저장 코드를 확인하세요.")
         return
-    
+
     rounds  = [m["round"]   for m in dqn_metrics]
     epsilon = [m["epsilon"] for m in dqn_metrics]
 
-    plt.figure(figsize=(10,5))
+    plt.figure(figsize=(10, 5))
     plt.plot(rounds, epsilon, color=COLOR_DQN, linewidth=2)
     plt.title("DQN Epsilon per Round", fontsize=12, fontweight="bold")
     plt.xlabel("Round")
@@ -252,7 +242,6 @@ def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
     print(f"Epsilon 그래프 저장 완료: {out}")
 
 
-# ── 메인 ──────────────────────────────────────────────
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dqn_path",    type=str, default="results_dqn.pkl")

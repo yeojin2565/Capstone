@@ -2,12 +2,6 @@
 client.py
 
 Flower 클라이언트
-
-수정 사항:
-    [BUG-4 경미] _make_loaders: CPU 환경에서 pin_memory=True는 오히려 느림 → False 고정
-                 (GPU 환경이라면 pin_memory=True가 맞지만, 현재 CPU-only 운용 기준)
-    [BUG-5 중간] fit(): dropout=True 시 학습 전 파라미터를 반환하여 실제로 집계에서 제외.
-                 data_size=0 전달 → FedAvg weighted average에서 가중치 0으로 처리됨.
 """
 
 import time
@@ -27,6 +21,7 @@ import gc
 
 
 _TRAIN_TRANSFORM = Compose([
+    # data augmentation
     RandomCrop(32, padding=4),
     RandomHorizontalFlip(),
     ToTensor(),
@@ -56,14 +51,11 @@ def _make_loaders(train_indices: List[int], val_indices: List[int],
     trainset = CIFAR10(data_path, train=True, download=False, transform=_TRAIN_TRANSFORM)
     valset   = CIFAR10(data_path, train=True, download=False, transform=_VAL_TRANSFORM)
 
-    # ── [BUG-4 FIX] pin_memory=False ────────────────────────────────
-    # CPU-only 환경에서 pin_memory=True는 내부적으로 pinned memory 복사를 시도해
-    # 오히려 오버헤드가 생김. GPU 사용 시에만 True로 변경할 것.
     trainloader = DataLoader(
         Subset(trainset, train_indices),
         batch_size=batch_size,
         shuffle=True,
-        pin_memory=False,
+        pin_memory=True,  # [FIXME]: cpu 시 false로 수정 요망
     )
     valloader = DataLoader(
         Subset(valset, val_indices),
@@ -87,7 +79,7 @@ class FlowerClient(fl.client.NumPyClient):
         super().__init__()
 
         self.cid           = cid
-        self.device        = torch.device("cpu")
+        self.device        = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model         = Net(num_classes).to(self.device)
         self.num_classes   = num_classes
         self.batch_size    = batch_size
