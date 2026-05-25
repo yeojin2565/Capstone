@@ -28,7 +28,7 @@ GROUP_CONFIG = {
 }
 ```
 
-### (a) Metric
+### (a) Client Metrics
 ```python
 """client.py"""
 metrics = {
