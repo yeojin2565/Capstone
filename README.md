@@ -185,7 +185,8 @@ $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 ![alt text](results/epsilon_per_round.png "epsilon")
 <br>
 
-- 처음에는 random selection보다 리워드가 낮았으나 epsilon이 하강하는 50 round 근처에서부터 reward가 상승하기 시작함
+- 처음에는 random selection보다 리워드가 낮았으나 epsilon이 최소가 되는 50 round 근처에서부터 reward가 높은 값으로 수렴하기 시작
+- 50 round 이전 HE latency, reward가 불안정한 이유는 epsilon greedy로 인한 탐험 때문으로 추정
 
 ## Ablation Study
 ![alt text](results/comparison_without%20data%20size.png "w_q=0")
