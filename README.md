@@ -189,9 +189,11 @@ $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 
 ## Ablation Study
 ![alt text](results/comparison_without%20data%20size.png "w_q=0")
+
 | |DQN|DQN, $w_q=0$|Random|
-|---|---|---|
+|---|---|---|---|
 |최종 Accuracy|0.7090|0.6840|0.7138|
 |최고 Accuracy|0.7196|0.6975|0.7397|
+
 - Reward 식의 Average Quality bonus $\bar{Q_t}$항의 계수 $w_q=0$으로 두고 실험 진행
 - data size를 reward에 반영하였을 때 accuracy가 조금 더 높은 것을 확인할 수 있음
