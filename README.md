@@ -179,4 +179,4 @@ $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 |평균 HE latency|0.0888|0.1765|
 |평균 Reward|0.1468|0.0497|
 
-![alt text](image.png)
+![alt text](C:\Users\yeoji\Desktop\종설\Capstone\results\comparison.png)
