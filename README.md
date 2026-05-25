@@ -187,7 +187,7 @@ $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 
 - 처음에는 random selection보다 리워드가 낮았으나 epsilon이 하강하는 50 round 근처에서부터 reward가 상승하기 시작함
 
-### Ablation Study
+## Ablation Study
 ![alt text](results/comparison_without%20data%20size.png "w_q=0")
 | |DQN|DQN, $w_q=0$|Random|
 |---|---|---|
