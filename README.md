@@ -186,4 +186,12 @@ $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 <br>
 
 - 처음에는 random selection보다 리워드가 낮았으나 epsilon이 하강하는 50 round 근처에서부터 reward가 상승하기 시작함
-- data size와 non-IID 간의 상관관계를 보기 위해 ablation study를 하려고 함
+
+### Ablation Study
+![alt text](results/comparison_without%20data%20size.png "w_q=0")
+| |DQN|DQN, $w_q=0$|Random|
+|---|---|---|
+|최종 Accuracy|0.7090|0.6840|0.7138|
+|최고 Accuracy|0.7196|0.6975|0.7397|
+- Reward 식의 Average Quality bonus $\bar{Q_t}$항의 계수 $w_q=0$으로 두고 실험 진행
+- data size를 reward에 반영하였을 때 accuracy가 조금 더 높은 것을 확인할 수 있음
