@@ -94,8 +94,8 @@ def simulate_he_latency(base_latency: float) -> float:
 
 ## 4. DQN
 ### (a) State
-- $C_i = [h_i, d_i]$ 
-- $h_i = [\text{HE latency of i-th client}, d_i = \text{data size of i-th client}]$
+- $C^{(i)} = [h^{(i)}, d^{(i)}]$ 
+- $h^{(i)} = \text{HE latency of i-th client}, \ d^{(i)} = \text{data size of i-th client}$
 
 ### (b) Action
 - DQN output: 100개 clients 각각에 대한 score
@@ -111,32 +111,49 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |---|---|
 |$R_t$|round $t$의 reward|
 |$\Delta Acc_t$|accuracy 변화량|
-|$\bar{Q}_t$|평균 quality bonus|
-|$\bar{H}_t$|평균 HE latency|
+|$\bar{Q_t}$|평균 quality bonus|
+|$\bar{H_t}$|평균 HE latency|
 |$D_t$|dropout rate|
 |$k$|선택된 클라이언트수|
 |$S_t$|round $t$에 선택된 클라이언트 집합|
 |$d_i$|client $i$의 normalized data size|
 |$h_i$|client $i$의 normalized HE latency|
+|$B^{fast}_t$|fast bonus|
+|$P^{slow}_t|slow penalty|
+|$h_i$|HE latency of i-th client|
+|$d_i$|data size of i-th client|
 
 $
-R_t
-= w_{\mathrm{acc}} \,\Delta \mathrm{Acc}_t
-+ w_{\mathrm{q}} \,\overline{Q}_t
-- w_{\mathrm{he}} \,\overline{H}_t
-- w_{\mathrm{drop}} \, D_t
-+ B_t^{\mathrm{fast}}
-- P_t^{\mathrm{slow}}
+R_t = 
+w_{acc}\Delta Acc_t
++ w_{q}\bar{Q_t}
+- w_{HE}\bar{H_t}
+- w_{drop}D_t
++ B^{fast}_t
+- P^{slow}_t
 $
 
-where
+#### where
+$Q^{(i)} = d^{(i)} (1-h^{(i)})$
+$\bar{Q_t} = \frac{1}{k}\sum_{i \in S_t}Q^{(i)}$
+$\bar{H_t} = \frac{1}{k}\sum_{i \in S_t}H^{(i)}$
+$D_t=\frac{n^{drop}_k}{k}$
+$B^{fast}_t = \alpha \frac{n^{fast}_t}{k}, \ \alpha = 0.25$
+$P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$
 
-$
-Q_i = d_i (1 - h_i), \quad
-D_t = \frac{n_t^{\mathrm{drop}}}{k}, \quad
-B_t^{\mathrm{fast}} = \alpha \frac{n_t^{\mathrm{fast}}}{k}, \quad
-P_t^{\mathrm{slow}} = \beta \frac{n_t^{\mathrm{slow}}}{k}.
-$
+
+```python
+"""dqn_strategy.py"""
+    reward = (
+          w1 * acc_gain_norm       # Δaccuracy
+        + w2 * avg_quality_bonus   # data size 크고 HE latency 낮을 수록 bonus 상승
+        - w3 * avg_he_norm         # HE latency
+        - w4 * dropout_rate        
+        + fast_bonus               
+        - slow_penalty             
+    )
+    return reward, curr_acc
+```
 
 # 실험 결과
 
