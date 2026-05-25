@@ -3,6 +3,7 @@
 ## 1. Architecture
 - 1 Cloud Server 100 clients
 - 클라이언트에서 2번의 epoch 수행 후 서버로 전송, FedAvg 후 글로벌 모델 업데이트(Flower 프레임워크)
+- DQN은 각각의 client마다 scoring
 
 ## 2. Dataset
 - CIFAR-10
@@ -92,7 +93,7 @@ def simulate_he_latency(base_latency: float) -> float:
     return float(np.clip(latency, 0.005, HE_LATENCY_MAX))
 ```
 
-## 4. DQN
+## 4. MDP Formulation
 ### (a) State
 - $C^{(i)} = [h^{(i)}, d^{(i)}]$ 
 - $h^{(i)} = \text{HE latency of i-th client}, \ d^{(i)} = \text{data size of i-th client}$
