@@ -123,23 +123,15 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |$h_i$|HE latency of i-th client|
 |$d_i$|data size of i-th client|
 
-$
-R_t = 
-w_{acc}\Delta Acc_t
-+ w_{q}\bar{Q_t}
-- w_{HE}\bar{H_t}
-- w_{drop}D_t
-+ B^{fast}_t
-- P^{slow}_t
-$
+$R_t = w_{acc}\Delta Acc_t + w_{q}\bar{Q_t} - w_{HE}\bar{H_t} - w_{drop}D_t + B^{fast}_t - P^{slow}_t$
 
 #### where
-$Q^{(i)} = d^{(i)} (1-h^{(i)})$
-$\bar{Q_t} = \frac{1}{k}\sum_{i \in S_t}Q^{(i)}$
-$\bar{H_t} = \frac{1}{k}\sum_{i \in S_t}H^{(i)}$
-$D_t=\frac{n^{drop}_k}{k}$
-$B^{fast}_t = \alpha \frac{n^{fast}_t}{k}, \ \alpha = 0.25$
-$P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$
+$Q^{(i)} = d^{(i)} (1-h^{(i)})$<br>
+$\bar{Q_t} = \frac{1}{k}\sum_{i \in S_t}Q^{(i)}$<br>
+$\bar{H_t} = \frac{1}{k}\sum_{i \in S_t}H^{(i)}$<br>
+$D_t=\frac{n^{drop}_k}{k}$<br>
+$B^{fast}_t = \alpha \frac{n^{fast}_t}{k}, \ \alpha = 0.25$<br>
+$P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 
 
 ```python
