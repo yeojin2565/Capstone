@@ -119,7 +119,7 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |$d_i$|client $i$의 normalized data size|
 |$h_i$|client $i$의 normalized HE latency|
 |$B^{fast}_t$|fast bonus|
-|$P^{slow}_t|slow penalty|
+|$P^{slow}_t$|slow penalty|
 |$h_i$|HE latency of i-th client|
 |$d_i$|data size of i-th client|
 
