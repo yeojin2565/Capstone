@@ -179,4 +179,11 @@ $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
 |평균 HE latency|0.0888|0.1765|
 |평균 Reward|0.1468|0.0497|
 
-![alt text](\results\comparison.png)
+![alt text](results/comparison.png "실험결과") 
+<br>
+
+![alt text](results/epsilon_per_round.png "epsilon")
+<br>
+
+- 처음에는 random selection보다 리워드가 낮았으나 epsilon이 하강하는 50 round 근처에서부터 reward가 상승하기 시작함
+- data size와 non-IID 간의 상관관계를 보기 위해 ablation study를 하려고 함
