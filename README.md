@@ -100,7 +100,8 @@ def simulate_he_latency(base_latency: float) -> float:
 
 ### (b) Action
 - DQN output: 100개 clients 각각에 대한 score
-- $Q(s, a) ≈ \frac{1}{k}\sum_{i∈a} \text{score}(i)$
+- score가 가장 높은 k개의 client 선택
+- $Q(s, a) = \frac{1}{k}\sum_{i∈a} \text{score}(i)$
 ```python
 """dqn.py"""
 curr_scores = self.model(states_t)                        # [B, n_clients]
