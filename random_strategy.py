@@ -84,7 +84,8 @@ class FedAvgWithRandom(FedAvg):
 
         # [BUG/HACK]: dqn strategy와 다른 리워드 식 / 하드 코딩으로 동일하게 수정
         w1 = 0.30
-        w2 = 0.10
+        # w2 = 0.10
+        w2 = 0.0
         w3 = 0.55
         w4 = 0.05
         reward = (

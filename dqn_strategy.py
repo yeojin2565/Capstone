@@ -52,7 +52,8 @@ def compute_reward(
     prev_acc:      float,
     k_select:      int = K_SELECT,
     w1: float = 0.30,
-    w2: float = 0.10,
+    # w2: float = 0.10,
+    w2: float = 0.0,
     w3: float = 0.55,
     w4: float = 0.05,
 ) -> tuple[float, float]:
