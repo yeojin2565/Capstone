@@ -55,7 +55,7 @@ def _make_loaders(train_indices: List[int], val_indices: List[int],
         Subset(trainset, train_indices),
         batch_size=batch_size,
         shuffle=True,
-        pin_memory=True,  # [FIXME]: cpu 시 false로 수정 요망
+        pin_memory=torch.cuda.is_available(),  
     )
     valloader = DataLoader(
         Subset(valset, val_indices),

@@ -98,7 +98,31 @@ def prepare_dataset(
     testloader = DataLoader(testset, batch_size=128, shuffle=False)
     return train_subsets, val_subsets, testloader
  
- 
+
+# ----- 클래스 분포 계산 -----
+def compute_client_class_dist(train_subsets, num_classes: int = 10) -> np.ndarray:
+    """
+    클라이언트별 클래스 분포 계산
+    반환: [N_CLIENTS, num_classes] (각 행은 정규화된 클래스 비율)
+    """
+    dist = np.zeros((len(train_subsets), num_classes), dtype=np.float32)
+
+    for cid, subset in enumerate(train_subsets):
+        # subset은 중첩 Subset이므로 실제 인덱스 추출
+        parent = subset.dataset          # Subset(trainset, idxs)
+        flat_indices = [parent.indices[i] for i in subset.indices]
+        labels = [parent.dataset.targets[i] for i in flat_indices]
+
+        for label in labels:
+            dist[cid][label] += 1
+
+        total = dist[cid].sum()
+        if total > 0:
+            dist[cid] /= total           # 정규화
+
+    return dist
+
+
 if __name__ == "__main__":
     train_subsets, val_subsets, testloader = prepare_dataset(num_clients=100)
     print(f"클라이언트 수: {len(train_subsets)}")

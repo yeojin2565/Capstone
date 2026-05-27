@@ -69,7 +69,7 @@ class FedAvgWithRandom(FedAvg):
         avg_data    = float(np.mean([m.get("data_size", 500) for m in metrics_list]))
 
         acc_gain      = curr_acc - self._prev_acc
-        acc_gain_norm = float(np.tanh(acc_gain / 0.03))   # DQN과 동일
+        acc_gain_norm = float(np.tanh(acc_gain / 0.05))   # DQN과 동일
 
         quality_bonuses   = [d * (1.0 - h) for d, h in zip(data_norms, he_norms)]
         avg_quality_bonus = float(np.mean(quality_bonuses))
