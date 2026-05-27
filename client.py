@@ -88,7 +88,7 @@ class FlowerClient(fl.client.NumPyClient):
         self.train_indices = train_indices
         self.val_indices   = val_indices
 
-        self.base_he_latency = init_base_latency(cid, seed=42)
+        self.base_he_latency = init_base_latency(cid, seed=123) # default=42
         print(f"Client {cid} using: {self.device}")
 
     def set_parameters(self, parameters):

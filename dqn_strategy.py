@@ -51,13 +51,12 @@ def compute_reward(
     dropout_count: int,
     prev_acc:      float,
     k_select:      int = K_SELECT,
-    w1: float = 0.30,
-    # w2: float = 0.10,
-    w2: float = 0.0,
-    w3: float = 0.55,
-    w4: float = 0.05,
-) -> tuple[float, float]:
     # w1, w2, w3, w4: handling parameters
+    w1: float = 0.30,  # accuracy
+    w2: float = 0.10,  # quality
+    w3: float = 0.55,   # HE latency(defalut=0.55)
+    w4: float = 0.05,  # dropout
+) -> tuple[float, float]:
     # norms = normalized
     he_norms   = [np.clip(m.get("he_latency", 0.5) / HE_MAX,   0.0, 1.0) for m in metrics_list if m]
     data_norms = [np.clip(m.get("data_size",  500)  / DATA_MAX, 0.0, 1.0) for m in metrics_list if m]

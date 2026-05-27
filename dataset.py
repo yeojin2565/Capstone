@@ -33,7 +33,7 @@ def get_cifar10(data_path: str = "./data"):
     return trainset, testset
 
 
-def dirichlet_split(targets, num_clients: int, alpha: float = 0.5, seed: int = 42):
+def dirichlet_split(targets, num_clients: int, alpha: float = 0.5, seed: int = 123): # defalut=42
     """
     Dirichlet 분포로 클라이언트별 인덱스 분배
     alpha 작을수록 더 non-IID (0.5 = 표준 설정)

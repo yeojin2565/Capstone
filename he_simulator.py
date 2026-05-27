@@ -91,7 +91,7 @@ if __name__ == "__main__":
     groups = {}
     for cid in range(100):
         group = get_group(cid)
-        base  = init_base_latency(cid, seed=42)
+        base  = init_base_latency(cid, seed=123) # defalut=42
         if group not in groups:
             groups[group] = []
         groups[group].append(base)

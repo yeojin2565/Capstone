@@ -83,11 +83,10 @@ class FedAvgWithRandom(FedAvg):
         slow_penalty = HE_SLOW_PENALTY * (slow_count / max(self.k_select, 1))
 
         # [BUG/HACK]: dqn strategy와 다른 리워드 식 / 하드 코딩으로 동일하게 수정
-        w1 = 0.30
-        # w2 = 0.10
-        w2 = 0.0
-        w3 = 0.55
-        w4 = 0.05
+        w1 = 0.30  # accuracy
+        w2 = 0.10  # quality
+        w3 = 0.55   # HE latency(defalut=0.55)
+        w4 = 0.05  # dropout
         reward = (
               w1 * acc_gain_norm
             + w2 * avg_quality_bonus
