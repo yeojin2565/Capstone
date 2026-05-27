@@ -157,7 +157,7 @@ class DQNAgent:
         # 타깃 Q값
         with torch.no_grad():
             next_scores = self.target_model(next_states_t)        # [B, n_clients]
-            next_q      = next_scores.max(1)[0]
+            next_q      = next_scores.topk(self.k_select, dim=1).values.mean(dim=1)  # k개 평균
             target_q    = rewards_t + (1 - dones_t) * GAMMA * next_q
 
         loss = nn.MSELoss()(curr_q, target_q)
