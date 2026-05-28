@@ -82,7 +82,7 @@ class FedAvgWithRandom(FedAvg):
         slow_count   = sum(1 for h in he_norms if h > HE_SLOW_THRESHOLD)
         slow_penalty = HE_SLOW_PENALTY * (slow_count / max(self.k_select, 1))
 
-        # [BUG/HACK]: dqn strategy와 다른 리워드 식 / 하드 코딩으로 동일하게 수정
+        # [HACK]: 하드 코딩으로 동일하게 수정
         w1 = 0.30  # accuracy
         w2 = 0.10  # quality
         w3 = 0.55   # HE latency(defalut=0.55)
