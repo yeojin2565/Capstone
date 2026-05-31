@@ -1,9 +1,6 @@
 """
 random_strategy.py - Random selection baseline
 DQN과 동일한 reward 공식 사용 (공정한 비교)
-
-수정 사항:
-    [TUNE-1] reward 가중치·tanh 스케일·fast_bonus를 DQN과 동일하게 맞춤
 """
 
 import random
@@ -85,7 +82,7 @@ class FedAvgWithRandom(FedAvg):
         # [HACK]: 하드 코딩으로 동일하게 수정
         w1 = 0.30  # accuracy
         w2 = 0.10  # quality
-        w3 = 0.55   # HE latency(defalut=0.55)
+        w3 = 0.55  # HE latency(defalut=0.55)
         w4 = 0.05  # dropout
         reward = (
               w1 * acc_gain_norm
