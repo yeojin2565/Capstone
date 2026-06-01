@@ -2,7 +2,7 @@
 server.py
 
 서버 설정
-- fit config 전달
+- fit config 전달 (server_round 포함 → client.py에서 재현성 있는 RNG에 활용)
 - 글로벌 모델 평가
 """
 
@@ -19,6 +19,7 @@ def get_on_fit_config(config: DictConfig):
             "lr":           config.lr,
             "momentum":     config.momentum,
             "local_epochs": config.local_epochs,
+            "server_round": server_round,   # ← 추가: client.py RNG 재현성용
         }
     return fit_config_fn
 

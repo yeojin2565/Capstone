@@ -11,11 +11,11 @@ he_simulator.py
     Extreme    (cid 90~99)  : N(5.00, 0.500)  극단적으로 나쁜 기기
 
 수정 사항:
-    [BUG-11 중간] init_base_latency(): np.random.seed()로 전역 상태를 오염시키던 문제 수정.
-                  np.random.default_rng(seed + cid)로 독립 RNG 인스턴스를 사용.
-                  → Ray 병렬 액터 환경에서도 다른 클라이언트의 랜덤 시퀀스에 간섭하지 않음.
-                  → 재현성 보장.
-    [CHANGE] 클라이언트 수 36 → 100에 맞게 그룹 경계 재조정.
+    [BUG-11] init_base_latency(): 독립 RNG 사용 (기존 유지)
+    [BUG-12] simulate_he_latency(): 전역 np.random → cid+round 기반 독립 RNG
+             Ray 병렬 환경에서 전역 랜덤 상태 오염 방지 + 재현성 보장
+    [BUG-13] simulate_dropout(): 전역 np.random → cid+round 기반 독립 RNG
+             동일 이유. round_num 없을 경우 cid 단독 시드 사용.
 """
 
 import numpy as np
@@ -48,35 +48,38 @@ def init_base_latency(cid: int, seed: int = None) -> float:
     클라이언트 고유 기본 HE latency 초기화 (1회)
     가우시안 분포에서 샘플링 → 클라이언트마다 고정된 성능 부여
     """
-    # ── [BUG-11 FIX] 전역 np.random.seed 대신 독립 RNG 사용 ────────
-    # 수정 전: np.random.seed(seed + cid) → 전역 랜덤 상태 오염
-    #          Ray 병렬 환경에서 다른 클라이언트의 랜덤 시퀀스가 간섭받음
-    # 수정 후: np.random.default_rng()로 클라이언트별 독립 RNG 생성
-    rng    = np.random.default_rng(seed + cid if seed is not None else None)
+    rng    = np.random.default_rng(seed + cid if seed is not None else cid)
     group  = get_group(cid)
     config = GROUP_CONFIG[group]
     base   = rng.normal(config["mean"], config["std"])
     return float(np.clip(base, 0.005, HE_LATENCY_MAX))
 
 
-def simulate_he_latency(base_latency: float) -> float:
+def simulate_he_latency(base_latency: float, cid: int = 0, round_num: int = 0) -> float:
     """
-    매 라운드 HE latency 계산
-    기본 latency + 전송 중 랜덤 노이즈
+    매 라운드 HE latency 계산: 기본 latency + 전송 중 랜덤 노이즈
+
+    [BUG-12 FIX] 전역 np.random 대신 cid+round 기반 독립 RNG 사용.
+    → Ray 병렬 환경에서 클라이언트 간 랜덤 상태 간섭 없음.
+    → 동일 (cid, round_num) 조합이면 항상 동일한 노이즈 → 재현성 보장.
     """
-    noise   = np.random.normal(0, TRANSMISSION_NOISE_STD)
-    latency = base_latency + noise
-    return float(np.clip(latency, 0.005, HE_LATENCY_MAX))
+    rng   = np.random.default_rng(cid * 100000 + round_num)
+    noise = rng.normal(0, TRANSMISSION_NOISE_STD)
+    return float(np.clip(base_latency + noise, 0.005, HE_LATENCY_MAX))
 
 
-def simulate_dropout(cid: int) -> bool:
+def simulate_dropout(cid: int, round_num: int = 0) -> bool:
     """
     그룹별 확률로 dropout 시뮬레이션
     True: 해당 라운드 탈락
+
+    [BUG-13 FIX] 전역 np.random 대신 cid+round 기반 독립 RNG 사용.
+    → he_latency RNG와 시드 충돌 방지를 위해 offset(+999983) 추가.
     """
     group = get_group(cid)
     prob  = GROUP_CONFIG[group]["dropout"]
-    return np.random.random() < prob
+    rng   = np.random.default_rng(cid * 100000 + round_num + 999983)
+    return bool(rng.random() < prob)
 
 
 def normalize_latency(latency: float) -> float:

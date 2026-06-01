@@ -4,10 +4,10 @@ client.py
 Flower 클라이언트
 
 수정 사항:
-    [BUG-4 경미] _make_loaders: CPU 환경에서 pin_memory=True는 오히려 느림 → False 고정
-                 (GPU 환경이라면 pin_memory=True가 맞지만, 현재 CPU-only 운용 기준)
-    [BUG-5 중간] fit(): dropout=True 시 학습 전 파라미터를 반환하여 실제로 집계에서 제외.
-                 data_size=0 전달 → FedAvg weighted average에서 가중치 0으로 처리됨.
+    [BUG-4]  _make_loaders: CPU 환경에서 pin_memory=False 고정
+    [BUG-5]  fit(): dropout 판정을 학습 전에 수행, data_size=0으로 FedAvg 집계 제외
+    [BUG-12] fit(): simulate_he_latency에 cid, round_num 전달 → 재현성 있는 독립 RNG
+    [BUG-13] fit(): simulate_dropout에 round_num 전달 → 재현성 있는 독립 RNG
 """
 
 import time
@@ -41,29 +41,26 @@ _VAL_TRANSFORM = Compose([
 def _unwrap_indices(subset) -> List[int]:
     """
     dataset.py의 random_split은 중첩 Subset을 만든다:
-        for_train.dataset  = Subset(trainset, idxs)   ← 중간 Subset
-        for_train.indices  = 중간 Subset 안 인덱스     ← trainset 직접 인덱스 X
+        for_train.dataset  = Subset(trainset, idxs)
+        for_train.indices  = 중간 Subset 안 인덱스
 
     trainset 기준 실제 인덱스로 변환.
     """
-    parent = subset.dataset   # Subset(trainset, idxs)
+    parent = subset.dataset
     return [parent.indices[i] for i in subset.indices]
 
 
 def _make_loaders(train_indices: List[int], val_indices: List[int],
                   batch_size: int, data_path: str = "./data"):
-    """trainset 기준 flat 인덱스로 DataLoader 생성 (쓰고 나면 del로 해제)"""
+    """trainset 기준 flat 인덱스로 DataLoader 생성"""
     trainset = CIFAR10(data_path, train=True, download=False, transform=_TRAIN_TRANSFORM)
     valset   = CIFAR10(data_path, train=True, download=False, transform=_VAL_TRANSFORM)
 
-    # ── [BUG-4 FIX] pin_memory=False ────────────────────────────────
-    # CPU-only 환경에서 pin_memory=True는 내부적으로 pinned memory 복사를 시도해
-    # 오히려 오버헤드가 생김. GPU 사용 시에만 True로 변경할 것.
     trainloader = DataLoader(
         Subset(trainset, train_indices),
         batch_size=batch_size,
         shuffle=True,
-        pin_memory=False,
+        pin_memory=False,   # CPU-only 환경
     )
     valloader = DataLoader(
         Subset(valset, val_indices),
@@ -112,16 +109,17 @@ class FlowerClient(fl.client.NumPyClient):
     def fit(self, parameters, config):
         self.set_parameters(parameters)
 
-        lr       = config["lr"]
-        momentum = config["momentum"]
-        epochs   = config["local_epochs"]
+        lr        = config["lr"]
+        momentum  = config["momentum"]
+        epochs    = config["local_epochs"]
+        round_num = int(config.get("server_round", 0))   # ← 라운드 번호 수신
 
-        # ── [BUG-5 FIX] dropout 판정을 학습 전에 수행 ───────────────
-        # 수정 전: 학습 완료 후 dropped를 판정 → 학습 결과가 집계에 포함됨
-        # 수정 후: dropped=True면 학습 자체를 건너뛰고 서버 파라미터 그대로 반환.
-        #          data_size=0 → FedAvg 가중 평균에서 가중치 0 → 사실상 집계 제외.
-        dropped = simulate_dropout(self.cid)
-        he_latency = simulate_he_latency(self.base_he_latency)
+        # [BUG-12/13 FIX] cid + round_num → 독립 RNG → 재현성 보장
+        # Ray 병렬 환경에서 실행 순서와 무관하게 동일 결과
+        dropped    = simulate_dropout(self.cid, round_num=round_num)
+        he_latency = simulate_he_latency(
+            self.base_he_latency, cid=self.cid, round_num=round_num
+        )
 
         if dropped:
             metrics = {
@@ -129,7 +127,7 @@ class FlowerClient(fl.client.NumPyClient):
                 "accuracy":      0.0,
                 "train_latency": 0.0,
                 "he_latency":    float(he_latency),
-                "data_size":     0,          # 가중치 0 → FedAvg 집계 제외
+                "data_size":     0,
                 "dropped":       1,
                 "cid":           self.cid,
             }
