@@ -26,6 +26,7 @@ from client import generate_client_fn
 from server import get_on_fit_config, get_evaluate_fn
 from dqn import K_SELECT
 from random_strategy import FedAvgWithRandom
+from dataset import compute_client_class_dist
 
 # ── [BUG-8 FIX] 중복 초기화 방지 ───────────────────────────────────
 if not ray.is_initialized():
@@ -49,6 +50,7 @@ def main(cfg: DictConfig):
         num_clients=cfg.num_clients,
         batch_size=cfg.batch_size,
     )
+    client_class_dist = compute_client_class_dist(train_subsets)
 
     # 2. 클라이언트 정의
     client_fn = generate_client_fn(
@@ -60,6 +62,7 @@ def main(cfg: DictConfig):
 
     # 3. 전략
     strategy = FedAvgWithRandom(
+        client_class_dist=client_class_dist,
         k_select=cfg.num_clients_per_round_fit,
         fraction_fit=0.00001,
         min_fit_clients=cfg.num_clients_per_round_fit,

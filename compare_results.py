@@ -1,5 +1,5 @@
 """
-compare_results_new.py
+compare_results.py
 
 DQN 제안 방법 vs Random baseline 비교 그래프
 
@@ -9,8 +9,6 @@ DQN 제안 방법 vs Random baseline 비교 그래프
     --random_path outputs/YYYY-MM-DD/HH-MM-SS/results_random.pkl
 
 수정 사항:
-    [BUG-10 치명] plot_epsilon_graph(): epsilon 키 존재 여부 가드 누락 → KeyError.
-                  compare_results.py에 있던 가드를 동일하게 적용.
 """
 
 import pickle
@@ -19,6 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from pathlib import Path
+from scipy.stats import entropy
 
 
 # ── 색상 ──────────────────────────────────────────────
@@ -61,7 +60,7 @@ def add_moving_average(ax, x: list, y: list, color: str, window: int = 5):
     window = min(window, len(y))
     kernel = np.ones(window) / window
     ma     = np.convolve(y, kernel, mode="valid")
-    x_ma   = x[window - 1: window - 1 + len(ma)]   # 길이 명시적 맞춤
+    x_ma   = x[window - 1: window - 1 + len(ma)]
     ax.plot(
         x_ma, ma,
         color=color, linewidth=2.2,
@@ -106,11 +105,9 @@ def plot_comparison(
     ax = axes[0][0]
     if d_loss:
         ax.plot(d_rl, d_loss, color=COLOR_DQN,   linewidth=1.5, alpha=0.35)
-        ax.fill_between(d_rl, d_loss, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, d_rl, d_loss, COLOR_DQN)
     if r_loss:
         ax.plot(r_rl, r_loss, color=COLOR_RANDOM, linewidth=1.5, alpha=0.35)
-        ax.fill_between(r_rl, r_loss, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, r_rl, r_loss, COLOR_RANDOM)
     ax.set_title("Global Loss", fontsize=12)
     ax.set_xlabel("Round")
@@ -125,11 +122,9 @@ def plot_comparison(
 
     if d_acc:
         ax.plot(d_ra, d_acc, color=COLOR_DQN,   linewidth=1.5, alpha=0.35)
-        ax.fill_between(d_ra, d_acc, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, d_ra, d_acc, COLOR_DQN)
     if r_acc:
         ax.plot(r_ra, r_acc, color=COLOR_RANDOM, linewidth=1.5, alpha=0.35)
-        ax.fill_between(r_ra, r_acc, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, r_ra, r_acc, COLOR_RANDOM)
 
     ax.axhline(conv_threshold, color="gray", linestyle=":", linewidth=1.2,
@@ -152,11 +147,9 @@ def plot_comparison(
     ax = axes[1][0]
     if dqn_he:
         ax.plot(dqn_rounds_he,    dqn_he,    color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
-        ax.fill_between(dqn_rounds_he, dqn_he, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, dqn_rounds_he, dqn_he, COLOR_DQN)
     if random_he:
         ax.plot(random_rounds_he, random_he, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
-        ax.fill_between(random_rounds_he, random_he, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, random_rounds_he, random_he, COLOR_RANDOM)
 
     ax.set_title("Avg HE Latency (normalized)", fontsize=12)
@@ -170,11 +163,9 @@ def plot_comparison(
     ax = axes[1][1]
     if dqn_rew:
         ax.plot(dqn_rounds_he,    dqn_rew,    color=COLOR_DQN,    linewidth=1.5, alpha=0.35)
-        ax.fill_between(dqn_rounds_he, dqn_rew, alpha=COLOR_SHADE, color=COLOR_DQN)
         add_moving_average(ax, dqn_rounds_he, dqn_rew, COLOR_DQN)
     if random_rew:
         ax.plot(random_rounds_he, random_rew, color=COLOR_RANDOM,  linewidth=1.5, alpha=0.35)
-        ax.fill_between(random_rounds_he, random_rew, alpha=COLOR_SHADE, color=COLOR_RANDOM)
         add_moving_average(ax, random_rounds_he, random_rew, COLOR_RANDOM)
 
     ax.axhline(0, color="gray", linestyle="--", linewidth=0.8)
@@ -216,9 +207,6 @@ def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
         print("dqn_metrics 데이터가 없습니다.")
         return
 
-    # ── [BUG-10 FIX] epsilon 키 존재 여부 가드 추가 ────────────────
-    # 수정 전: m["epsilon"] 직접 접근 → random pkl 사용 시 KeyError
-    # 수정 후: compare_results.py와 동일하게 가드 적용
     if "epsilon" not in dqn_metrics[0]:
         print("epsilon 데이터가 없습니다. dqn_strategy.py에 epsilon 저장 코드를 확인하세요.")
         return
@@ -242,6 +230,110 @@ def plot_epsilon_graph(dqn_results: dict, save_dir: str = "."):
     print(f"Epsilon 그래프 저장 완료: {out}")
 
 
+def plot_class_heatmap(results: dict, save_dir: str = "."):
+    metrics = results.get("dqn_metrics", [])
+
+    class_dist = np.array([
+        m["class_distribution"]
+        for m in metrics
+        if "class_distribution" in m
+    ])
+
+    if class_dist.size == 0:
+        print("class_distribution 데이터가 없습니다.")
+        return
+
+    plt.figure(figsize=(10, 6))
+    plt.imshow(
+        class_dist.T,
+        aspect="auto",
+        origin="lower",
+    )
+    plt.colorbar(label="Class ratio")
+    plt.xlabel("Round")
+    plt.ylabel("Class")
+    plt.yticks(range(10))
+    plt.title("Selected Clients Class Distribution")
+
+    out = Path(save_dir) / "class_distribution_heatmap.png"
+    Path(save_dir).mkdir(parents=True, exist_ok=True)
+
+    plt.savefig(out, dpi=150, bbox_inches="tight")
+    plt.show()
+    print(f"Heatmap 저장 완료: {out}")
+
+
+def _extract_entropy(results: dict) -> tuple[list[int], list[float]]:
+    """dqn_metrics에서 (rounds, entropy) 추출 헬퍼."""
+    metrics = results.get("dqn_metrics", [])
+    rounds, ent = [], []
+    for m in metrics:
+        if "class_distribution" not in m:
+            continue
+        p = np.array(m["class_distribution"])
+        rounds.append(m["round"])
+        ent.append(entropy(p + 1e-12))
+    return rounds, ent
+
+
+def plot_entropy(
+    dqn_results: dict,
+    random_results: dict,
+    save_dir: str = ".",
+):
+    """DQN vs Random class diversity (entropy) 비교 그래프."""
+    dqn_rounds,    dqn_ent    = _extract_entropy(dqn_results)
+    random_rounds, random_ent = _extract_entropy(random_results)
+    
+    print(
+    f"DQN entropy={len(dqn_ent)}, "
+    f"Random entropy={len(random_ent)}"
+    )
+
+    if not dqn_ent and not random_ent:
+        print("class_distribution 데이터가 없습니다.")
+        return
+
+    from matplotlib.lines import Line2D
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    if dqn_ent:
+        ax.plot(dqn_rounds, dqn_ent,
+                color=COLOR_DQN, linewidth=1.2, alpha=0.35)
+        add_moving_average(ax, dqn_rounds, dqn_ent, COLOR_DQN)
+
+    if random_ent:
+        ax.plot(random_rounds, random_ent,
+                color=COLOR_RANDOM, linewidth=1.2, alpha=0.35)
+        add_moving_average(ax, random_rounds, random_ent, COLOR_RANDOM)
+
+    handles = [
+        Line2D([0], [0], color=COLOR_DQN,    linewidth=2, label="DQN (proposed)"),
+        Line2D([0], [0], color=COLOR_RANDOM,  linewidth=2, label="Random (baseline)"),
+    ]
+    ax.legend(handles=handles, fontsize=9)
+    ax.set_title("Class Diversity (Entropy)", fontsize=12, fontweight="bold")
+    ax.set_xlabel("Round")
+    ax.set_ylabel("Entropy")
+    
+    all_ent = dqn_ent + random_ent
+    if all_ent:
+        ymin = min(all_ent) - 0.02
+        ymax = max(all_ent) + 0.02
+        ax.set_ylim(ymin, ymax)
+    
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+
+    out = Path(save_dir) / "class_entropy.png"
+    Path(save_dir).mkdir(parents=True, exist_ok=True)
+    plt.savefig(out, dpi=150, bbox_inches="tight")
+    plt.show()
+    print(f"Entropy 그래프 저장 완료: {out}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dqn_path",    type=str, default="results_dqn.pkl")
@@ -262,5 +354,16 @@ if __name__ == "__main__":
 
     plot_epsilon_graph(
         dqn_results,
+        save_dir=args.save_dir,
+    )
+
+    plot_class_heatmap(
+        dqn_results,
+        save_dir=args.save_dir,
+    )
+
+    plot_entropy(
+        dqn_results,
+        random_results,
         save_dir=args.save_dir,
     )

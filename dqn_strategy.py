@@ -53,8 +53,8 @@ def compute_reward(
     k_select:      int = K_SELECT,
     # w1, w2, w3, w4: handling parameters
     w1: float = 0.30,  # accuracy
-    w2: float = 0.10,  # quality
-    w3: float = 0.55,   # HE latency(defalut=0.55)
+    w2: float = 0.10,  # quality(default=0.10)
+    w3: float = 0.55,  # HE latency(defalut=0.55)
     w4: float = 0.05,  # dropout
 ) -> tuple[float, float]:
     # norms = normalized
@@ -92,7 +92,10 @@ def compute_reward(
 
 class FedAvgWithDQN(FedAvg):
 
-    def __init__(self, dqn_agent: DQNAgent, **kwargs):
+    def __init__(self,
+                 dqn_agent: DQNAgent,
+                 client_class_dist,
+                 **kwargs):
         super().__init__(**kwargs)
         self.agent    = dqn_agent
         self.k_select = dqn_agent.k_select
@@ -101,6 +104,8 @@ class FedAvgWithDQN(FedAvg):
         self._prev_state   = self._client_state.flatten()       # [200]
         self._prev_action  = list(range(self.k_select))
         self._prev_acc     = 0.0
+        self.client_class_dist = client_class_dist
+        self._selected_class_dist = np.zeros(10, dtype=np.float32)
 
         self.history_metrics: list[dict] = []
 
@@ -125,6 +130,8 @@ class FedAvgWithDQN(FedAvg):
             selected_idx += random.sample(remaining, need)
 
         selected_clients  = [all_clients[i] for i in selected_idx]
+        selected_class_dist = self.client_class_dist[selected_idx]
+        self._selected_class_dist = selected_class_dist.mean(axis=0)
         self._prev_action = selected_idx
 
         print(
@@ -197,6 +204,7 @@ class FedAvgWithDQN(FedAvg):
             "dropout_count":       dropout_count,
             "dqn_loss":            loss,
             "epsilon":             self.agent.epsilon,
+            "class_distribution":  self._selected_class_dist.tolist()
         })
 
         print(
