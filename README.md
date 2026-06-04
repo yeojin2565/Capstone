@@ -112,7 +112,7 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |Notation|의미|
 |---|---|
 |$R_t$|round $t$의 reward|
-|$\Delta Acc_t$|accuracy 변화량$(Acc_t-Acc_{t-1})$|
+|$\Delta Acc_t$|accuracy 변화량 $(Acc_t-Acc_{t-1})$|
 |$\bar{Q_t}$|선택된 클라이언트들의 평균 quality bonus|
 |$\bar{H_t}$|선택된 클라이언트들의 평균 HE latency|
 |$D_t$|dropout rate|
