@@ -112,16 +112,14 @@ curr_q      = (curr_scores * actions_t).sum(1) / self.k_select
 |Notation|의미|
 |---|---|
 |$R_t$|round $t$의 reward|
-|$\Delta Acc_t$|accuracy 변화량|
-|$\bar{Q_t}$|평균 quality bonus|
-|$\bar{H_t}$|평균 HE latency|
+|$\Delta Acc_t$|accuracy 변화량$(Acc_t-Acc_{t-1})|
+|$\bar{Q_t}$|선택된 클라이언트들의 평균 quality bonus|
+|$\bar{H_t}$|선택된 클라이언트들의 평균 HE latency|
 |$D_t$|dropout rate|
-|$k$|선택된 클라이언트수|
+|$k$|라운드당 선택된 클라이언트수|
 |$S_t$|round $t$에 선택된 클라이언트 집합|
-|$d_i$|client $i$의 normalized data size|
-|$h_i$|client $i$의 normalized HE latency|
-|$B^{fast}_t$|fast bonus|
-|$P^{slow}_t$|slow penalty|
+|$B^{fast}_t$|fast group bonus|
+|$P^{slow}_t$|slow group penalty|
 |$h^{(i)}$|HE latency of $i$-th client|
 |$d^{(i)}$|data size of $i$-th client|
 
@@ -130,7 +128,7 @@ $R_t = w_{acc}\Delta Acc_t + w_{q}\bar{Q_t} - w_{HE}\bar{H_t} - w_{drop}D_t + B^
 #### where
 $Q^{(i)} = d^{(i)} (1-h^{(i)})$<br>
 $\bar{Q_t} = \frac{1}{k}\sum_{i \in S_t}Q^{(i)}$<br>
-$\bar{H_t} = \frac{1}{k}\sum_{i \in S_t}H^{(i)}$<br>
+$\bar{H_t} = \frac{1}{k}\sum_{i \in S_t}h^{(i)}$<br>
 $D_t=\frac{n^{drop}_k}{k}$<br>
 $B^{fast}_t = \alpha \frac{n^{fast}_t}{k}, \ \alpha = 0.25$<br>
 $P^{slow}_t = \beta \frac{n^{slow}_t}{k}, \ \beta = 0.20$<br>
